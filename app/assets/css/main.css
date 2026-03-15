@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@theme {
+    --font-sans: Montserrat, ui-sans-serif, system-ui, sans-serif;
+
+    --color-electric-blue: #1700E5;
+    --color-electric-blue-hover: #1200b3;
+    --color-electric-blue-subtle: #dbd9f9;
+
+    --color-pure-black: #000000;
+    --color-pure-black-hover: #0C0C0C;
+    --color-pure-black-subtle: #f2f2f2;
+}

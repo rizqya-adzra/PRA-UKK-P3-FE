@@ -1,75 +1,27 @@
-# Nuxt Minimal Starter
+# Welcome to P3 Front End!
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+## Introduction
+Front End for P3 Pra-UKK project
 
-## Setup
+## Version (Under Development, view detail in CHANGELOG.md)
+- v1.0.0 at 14th Mar 2026
+- v1.0.1 at 15th Mar 2026
 
-Make sure to install dependencies:
+## Features
+- White minimalist style
+- Admin Dashboard and Student Interface
+- Data with PostgreSQL fetched from Django Rest API
+- Responsive for all device
 
-```bash
-# npm
-npm install
+## Acknowledgements
+This project is using: 
+- [NuxtJS V4](https://nuxt.com/docs/4.x/getting-started/introduction)
+- [nuxtjs/fonts](https://nuxt.com/modules/fonts)
+- [nuxtjs/icons]()
+- [nuxtjs/eslint]()
+- [nuxtjs/test-utils]()
+- [nuxtjs/ui]()
+- [nuxtjs/image]()
 
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## View BackEnd Repo
+- [PRA-UKK-P3-BE](https://github.com/rizqya-adzra/PRA-UKK-P3-BE)
