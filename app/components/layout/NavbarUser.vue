@@ -3,10 +3,10 @@
 </script>
 
 <template>
-  <header class="w-full h-[50px] bg-white px-8 flex items-center justify-between">
+  <header class="w-full h-20 bg-white px-8 flex items-center justify-between">
     
     <div class="flex items-center gap-8">
-      <img src="~/assets/images/logo.png" alt="Logo" class="w-8 h-8 shrink-0" />
+      <img src="~/assets/images/logo.png" alt="Logo" class="w-10 h-10 shrink-0" />
 
       <nav class="flex items-center gap-2">
         <NavButton label="Beranda" is-active />

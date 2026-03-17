@@ -6,6 +6,7 @@ Front End for P3 Pra-UKK project
 ## Version (Under Development, view detail in CHANGELOG.md)
 - v1.0.0 at 14th Mar 2026
 - v1.0.1 at 15th Mar 2026
+- v1.0.2 at 17th Mar 2026
 
 ## Features
 - White minimalist style

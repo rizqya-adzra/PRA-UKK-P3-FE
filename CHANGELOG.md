@@ -11,3 +11,9 @@
 - added NavbarUser.vue SidebarAdmin.vue in components/layout/
 - added Button.vue Icon.vue in components/nav/
 - added Button.vue components/ui/
+
+### V1.0.2
+- added Category.vue, Status.vue, Select.vue, and Date.vue in components/ui/dropdown/
+- added Category.vue, Status.vue, Select.vue, and Date.vue in pages/components.vue
+- modified Button.vue Icon.vue in components/nav/
+- modified NavbarUser.vue SidebarAdmin.vue in components/layout/
