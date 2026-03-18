@@ -42,7 +42,7 @@ const iconClasses = computed(() => {
 
 const classes = computed(() => [
   'rounded-[20px] flex items-center justify-center gap-3',
-  'Montserrat text-white text-center border-none select-none',
+  'Montserrat text-white text-center border-none select-none cursor-pointer',
   'transition-all duration-400',
   
   sizeVariants[props.variant],

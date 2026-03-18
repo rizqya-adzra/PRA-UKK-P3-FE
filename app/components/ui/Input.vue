@@ -9,11 +9,13 @@ const props = withDefaults(defineProps<{
   variant?: InputVariant
   showForgot?: boolean
   icon?: string 
+  error?: string
 }>(), {
   modelValue: '',
   type: 'text',
   variant: 'auth',
-  showForgot: false
+  showForgot: false,
+  error: ''
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -21,8 +23,8 @@ const emit = defineEmits(['update:modelValue'])
 const inputVariants: Record<InputVariant, string> = {
   auth: [
     'h-[60px] w-full rounded-[20px] px-6',
-    'bg-transparent border border-gray-500 text-white',
-    'focus:border-white focus:ring-1 focus:ring-white',
+    'bg-transparent border border-gray-500 text-black',
+    'focus:border-black focus:ring-1 focus:ring-black',
     'placeholder:text-gray-500 outline-none transition-all duration-300'
   ].join(' '),
   
@@ -39,7 +41,10 @@ const inputVariants: Record<InputVariant, string> = {
   <div class="w-full flex flex-col gap-2">
     
     <div v-if="variant === 'auth' && label" class="flex justify-between items-end px-2">
-      <label class="font-bold text-base Montserrat text-white">
+      <label 
+        class="font-bold text-base Montserrat transition-colors duration-300"
+        :class="error ? 'text-red-500' : 'text-black'"
+      >
         {{ label }}
       </label>
       
@@ -56,7 +61,8 @@ const inputVariants: Record<InputVariant, string> = {
       <UIcon
         v-if="icon"
         :name="icon"
-        class="absolute left-6 top-1/2 -translate-y-1/2 size-6 text-black transition-colors"
+        class="absolute left-6 top-1/2 -translate-y-1/2 size-6 transition-colors"
+        :class="error ? 'text-red-500' : 'text-black'"
       />
 
       <input
@@ -64,9 +70,16 @@ const inputVariants: Record<InputVariant, string> = {
         :value="modelValue"
         @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
         :placeholder="placeholder"
-        :class="inputVariants[variant]"
+        :class="[
+          inputVariants[variant],
+          error ? 'border-red-500! focus:border-red-500! focus:ring-red-500! text-red-500! placeholder:text-red-300!' : ''
+        ]"
       />
     </div>
+
+    <span v-if="error" class="text-red-500 text-xs font-medium px-4">
+      {{ error }}
+    </span>
 
   </div>
 </template>
