@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { useAuthStore } from '~/stores/auth'
 
 definePageMeta({
+  middleware: 'auth',
   layout: 'guest'
 })
 

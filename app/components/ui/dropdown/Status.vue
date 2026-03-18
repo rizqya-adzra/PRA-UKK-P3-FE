@@ -1,9 +1,9 @@
 <script setup lang="ts">
 const statuses = [
-  { id: 1, label: 'Menunggu', color: 'orange' as const },
-  { id: 2, label: 'Diproses', color: 'blue' as const },
-  { id: 3, label: 'Selesai', color: 'dark-green' as const },
-  { id: 4, label: 'Dibatalkan', color: 'red' as const }
+  { id: 1, label: 'Menunggu' as const },
+  { id: 2, label: 'Diproses' as const },
+  { id: 3, label: 'Selesai' as const },
+  { id: 4, label: 'Dibatalkan' as const }
 ]
 
 const selected = ref(statuses[0])
@@ -50,7 +50,6 @@ const selected = ref(statuses[0])
           <UiLabel 
             :text="item.label" 
             variant="outline" 
-            :color="item.color" 
           />
       </template>
     </USelectMenu>

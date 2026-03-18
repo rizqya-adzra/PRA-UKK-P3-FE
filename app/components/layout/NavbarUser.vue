@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <header class="w-full h-20 bg-white px-8 flex items-center justify-between">
+  <header class="sticky top-0 z-50 w-full h-20 bg-white/80 backdrop-blur-md border-b border-gray-200 px-8 flex items-center justify-between">
     
     <div class="flex items-center gap-8">
       <img src="~/assets/images/logo.png" alt="Logo" class="w-10 h-10 shrink-0" />

@@ -1,3 +1,9 @@
+<script setup lang="ts">
+definePageMeta({
+  layout: 'guest'
+})
+</script>
+
 <template>
   <div class="min-h-screen bg-gray-100">
 
@@ -39,17 +45,17 @@
     <UiDropdownDate />    
 
     <h1 class="text-white text-xs mt-4 font-mono">✦ Label - Solid</h1>
-    <UiLabel text="Fasilitas" variant="solid" color="purple" />
-    <UiLabel text="Lingkungan" variant="solid" color="light-green" />
-    <UiLabel text="Pendidikan" variant="solid" color="red" />
-    <UiLabel text="Karater" variant="solid" color="orange" />
-    <UiLabel text="Ibadah" variant="solid" color="pink" />
+    <UiLabel text="Fasilitas" variant="solid" />
+    <UiLabel text="Lingkungan" variant="solid"  />
+    <UiLabel text="Pendidikan" variant="solid" />
+    <UiLabel text="Karater" variant="solid" />
+    <UiLabel text="Ibadah" variant="solid" />
 
     <h1 class="text-white text-xs mt-4 font-mono">✦ Label - Outline</h1>
-    <UiLabel text="Menunggu" variant="outline" color="orange" />
-    <UiLabel text="Diproses" variant="outline" color="blue" />
-    <UiLabel text="Selesai" variant="outline" color="dark-green" />
-    <UiLabel text="Dibatalkan" variant="outline" color="red" />
+    <UiLabel text="Menunggu" variant="outline" />
+    <UiLabel text="Diproses" variant="outline" />
+    <UiLabel text="Selesai" variant="outline"  />
+    <UiLabel text="Dibatalkan" variant="outline" />
 
   </div>
 

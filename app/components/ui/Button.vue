@@ -25,7 +25,7 @@ const colorVariants: Record<ButtonColor, string> = {
 const sizeVariants: Record<ButtonVariant, string> = {
   primary: 'h-[60px] w-full font-bold text-md', 
   export: 'h-[34px] w-[240px] font-semibold text-xs group',
-  imperative: 'h-[60px] w-[240px] font-semibold text-sm'
+  imperative: 'h-[66px] w-[260px] font-semibold text-md'
 }
 
 const currentIcon = computed(() => {
@@ -41,7 +41,7 @@ const iconClasses = computed(() => {
 })
 
 const classes = computed(() => [
-  'rounded-[20px] flex items-center justify-center gap-3',
+  'rounded-full flex items-center justify-center gap-3',
   'Montserrat text-white text-center border-none select-none cursor-pointer',
   'transition-all duration-400',
   

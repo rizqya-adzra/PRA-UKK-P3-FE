@@ -22,3 +22,11 @@
 - added useApi.ts for API base URL 
 - added auth.ts for fetching and guest middleware
 - added login and register pages
+
+### V1.0.4
+- added index for landing page
+- added user dashboard in pages/user/index.vue
+- added useAspiration.ts
+- added layouts (default.vue and guest.vue)
+- added middleware (auth.vue)
+- added Card in components/ui/

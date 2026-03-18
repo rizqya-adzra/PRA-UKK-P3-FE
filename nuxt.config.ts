@@ -14,9 +14,6 @@ export default defineNuxtConfig({
   ],
   
   ui: {
-    icons: {
-      provider: 'iconify', 
-    },
   },
 
   runtimeConfig: {

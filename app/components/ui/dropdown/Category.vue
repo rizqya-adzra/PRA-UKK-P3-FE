@@ -1,10 +1,10 @@
 <script setup lang="ts">
 const categories = [
-  { id: 1, label: 'Fasilitas', color: 'purple' as const},
-  { id: 2, label: 'Lingkungan', color: 'light-green' as const},
-  { id: 3, label: 'Pendidikan', color: 'red' as const},
-  { id: 4, label: 'Karakter', color: 'orange' as const},
-  { id: 5, label: 'Ibadah', color: 'pink' as const}
+  { id: 1, label: 'Fasilitas' as const},
+  { id: 2, label: 'Lingkungan' as const},
+  { id: 3, label: 'Pendidikan' as const},
+  { id: 4, label: 'Karakter' as const},
+  { id: 5, label: 'Ibadah' as const}
 ]
 
 const selected = ref(categories[0])
@@ -51,7 +51,6 @@ const selected = ref(categories[0])
           <UiLabel 
             :text="item.label" 
             variant="solid" 
-            :color="item.color" 
           />
       </template>
     </USelectMenu>

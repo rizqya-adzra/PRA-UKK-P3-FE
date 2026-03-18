@@ -19,6 +19,7 @@ export const useAuthStore = defineStore('auth', {
     return {
       user: null as User | null,
       token: tokenCookie.value || null,
+      isStaff: useCookie('is_staff').value || false,
       loading: false,
       message: null as string | null,
       error: null as string | null,
@@ -42,9 +43,13 @@ export const useAuthStore = defineStore('auth', {
 
         if (response.success && response.data) {
             this.token = response.data.token
+            this.isStaff = response.data.is_staff
             this.user = { email: response.data.email } 
             const tokenCookie = useCookie('token')
             tokenCookie.value = response.data.token
+            const isStaffCookie = useCookie('is_staff')
+            isStaffCookie.value = response.data.is_staff.toString()
+
             return response 
         }
 
