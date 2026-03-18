@@ -30,3 +30,10 @@
 - added layouts (default.vue and guest.vue)
 - added middleware (auth.vue)
 - added Card in components/ui/
+
+### V1.0.5
+- added aspiration/create in pages/user/
+- added aspiration/list-page in pages/user/
+- added new input property
+- added Checkbox and FileUpload in components/ui/
+- modified all dropdown ui components

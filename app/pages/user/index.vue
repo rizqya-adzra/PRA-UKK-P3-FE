@@ -18,10 +18,7 @@ const listAspirasi = computed(() => response.value?.data || [])
     <img src="~/assets/images/user_welcome.jpg" alt="Welcome">
 
     <div class="w-full space-y-5">
-      <div class="flex items-center justify-start gap-3">
-        <p class="text-3xl font-bold">Bulan Ini Kamu Sudah Berkonstribusi</p>
-        <UIcon name="i-lucide-arrow-right" class="size-5" />
-      </div>
+      <p class="text-3xl font-bold">Bulan Ini Kamu Sudah Berkonstribusi</p>
       <div class="bg-white rounded-4xl w-full p-12 space-y-9">
         <div class="flex justify-between items-center">
           <div>
@@ -50,17 +47,25 @@ const listAspirasi = computed(() => response.value?.data || [])
     </div>
 
     <div class="w-full space-y-5">
-      <div class="flex items-center justify-start gap-3">
-        <p class="text-3xl font-bold">Histori Aspirasi Kamu</p>
-        <UIcon name="i-lucide-arrow-right" class="size-5" />
+      <div>
+        <NuxtLink to="/user/aspiration/list-page">
+          <div class="flex items-center justify-start gap-3">
+            <p class="text-3xl font-bold">Histori Aspirasi Kamu</p>
+            <UIcon name="i-lucide-arrow-right" class="size-5" />
+          </div>
+        </NuxtLink>
       </div>
-      <!-- <div class="bg-white rounded-4xl w-full px-12 py-24 space-y-9">
+      <div v-if="listAspirasi.length === 0" class="bg-white rounded-4xl w-full px-12 py-24 space-y-9">
         <p class="text-center">Masih kosong nih yuk bikin dulu!</p>
-      </div> -->
-      <div class="flex gap-2">
-        <UiCard v-for="item in listAspirasi" :key="item.id" :report="item" />
       </div>
-      
+
+      <div v-else class="flex gap-2">
+        <UiCard 
+          v-for="item in listAspirasi.slice(0, 2)" 
+          :key="item.id" 
+          :report="item" 
+        />
+      </div>
     </div>
 
     <div class="relative w-full text-center mt-20 mb-5">
@@ -71,7 +76,9 @@ const listAspirasi = computed(() => response.value?.data || [])
         class="w-full max-w-5xl mx-auto -mt-10 mb-10" 
       />
       <div class="absolute bottom-32 left-1/2 -translate-x-1/2 z-20">
-        <UiButton label="YUK! BUAT ASPIRASI"variant="imperative" color="gradient" />
+        <NuxtLink to="/user/aspiration/create">
+          <UiButton label="YUK! BUAT ASPIRASI"variant="imperative" color="gradient" />
+        </NuxtLink>
       </div>
     </div>
 

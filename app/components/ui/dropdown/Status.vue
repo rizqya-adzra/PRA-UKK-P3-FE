@@ -10,14 +10,14 @@ const selected = ref(statuses[0])
 </script>
 
 <template>
-  <div class="w-60">
+  <div>
     <USelectMenu 
       v-model="selected" 
       :items="statuses"
       variant="none"
       trailing-icon=""
       :ui="{
-        content: 'bg-[#DFE3F0]/80 backdrop-blur-md ring-0 border-none shadow-lg rounded-2xl p-3',
+        content: 'bg-[#E9ECF6]/80 backdrop-blur-md ring-0 border-none rounded-2xl p-3',
         input: 'hidden h-0 w-0 p-0 m-0 border-none', 
         item: 'hover:bg-transparent data-[highlighted]:bg-transparent justify-start p-2 cursor-pointer'
       }"
@@ -26,12 +26,12 @@ const selected = ref(statuses[0])
         <button 
           type="button"
           :class="[
-            'w-54 space-x-2 h-13 px-6 rounded-full flex items-center justify-between font-medium text-black outline-none transition-all duration-300 cursor-pointer border-2',
+            'w-36 space-x-2 h-13 px-6 rounded-full flex items-center justify-between font-medium text-black outline-none transition-all duration-300 cursor-pointer border-2',
             selected ? 'border-blue-500' : 'border-transparent',
-            open ? 'bg-[#DFE3F0]' : 'bg-white hover:bg-[#DFE3F0] focus:bg-[#DFE3F0]'
+            open ? 'bg-[#E9ECF6]' : 'bg-white hover:bg-[#E9ECF6] focus:bg-[#E9ECF6]'
           ]"
         >
-          <span class="text-base">{{ selected?.label || 'Status' }}</span>
+          <span class="text-sm truncate">{{ selected?.label || 'Status' }}</span>
           <UIcon 
             v-if="selected"
             name="i-lucide-x" 

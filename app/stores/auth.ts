@@ -10,7 +10,12 @@ interface ApiResponse<T = any> {
 
 interface User {
   email: string
-  id?: number
+  id?: number | string
+  name?: string
+  nis?: number | string
+  rombel?: string
+  image?: string | null
+  [key: string]: any 
 }
 
 export const useAuthStore = defineStore('auth', {
@@ -28,7 +33,7 @@ export const useAuthStore = defineStore('auth', {
   },
 
   actions: {
-   async login(payload: any) { 
+    async login(payload: any) { 
       this.loading = true
       this.message = null
       this.error = null
@@ -55,7 +60,6 @@ export const useAuthStore = defineStore('auth', {
 
       } catch (err: any) {
         const apiResponse = err.data as ApiResponse 
-
         const errorMsg = apiResponse?.message || 'Gagal login ke server'
         this.message = errorMsg
         this.error = errorMsg 
@@ -63,7 +67,6 @@ export const useAuthStore = defineStore('auth', {
         if (apiResponse?.errors) {
           this.validationErrors = apiResponse.errors
         }
-
         throw apiResponse 
       } finally {
         this.loading = false
@@ -95,12 +98,10 @@ export const useAuthStore = defineStore('auth', {
 
       } catch (err: any) {
         const apiResponse = err.data || {}
-
         const errorMsg = apiResponse?.message || err.statusMessage || 'Registrasi gagal'
 
         this.message = errorMsg
         this.error = errorMsg
-        
         this.validationErrors = apiResponse?.errors || {}
 
         const safeErrorPayload = {
@@ -108,9 +109,43 @@ export const useAuthStore = defineStore('auth', {
             message: errorMsg,
             errors: apiResponse?.errors || {} 
         }
-
         throw safeErrorPayload
 
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async fetchProfile() {
+      if (!this.token) return null
+
+      this.loading = true
+      this.error = null
+      const apiFetch = useApi()
+
+      try {
+        const response = await apiFetch<ApiResponse>('profile/', {
+          method: 'GET',
+          headers: {
+            Authorization: `Token ${this.token}`, 
+            Accept: 'application/json',
+          } 
+        })
+
+        if (response.success && response.data) {
+          this.user = {
+            ...this.user,
+            ...response.data
+          }
+          return response
+        }
+        
+      } catch (err: any) {
+        console.error('Failed to fetch profile:', err)
+        const apiResponse = err.data || {}
+        this.error = apiResponse?.message || 'Gagal mengambil data profil'
+        
+        throw apiResponse
       } finally {
         this.loading = false
       }
@@ -124,12 +159,9 @@ export const useAuthStore = defineStore('auth', {
         await apiFetch('auth/logout/', {
           method: 'POST'
         })
-
         console.log('Server session terminated')
-
       } catch (error: any) {
         console.warn('Logout failed on server (token expired?):', error.message)
-        
       } finally {
         this.user = null
         this.token = null
@@ -137,8 +169,10 @@ export const useAuthStore = defineStore('auth', {
         this.error = null
 
         const tokenCookie = useCookie('token')
-
+        const isStaffCookie = useCookie('is_staff')
+        
         tokenCookie.value = null
+        isStaffCookie.value = null
 
         this.loading = false
 

@@ -100,23 +100,23 @@ const isToday = (day: number | null) => {
 </script>
 
 <template>
-  <div class="w-60">
+  <div>
     <UPopover 
       v-model:open="isPopoverOpen"
       :ui="{
-        content: 'flex flex-col bg-[#B0B5C1] ring-0 border-none shadow-xl text-black font-medium p-5 rounded-[32px] w-[280px] outline-none'
+        content: 'flex flex-col bg-[#E9ECF6]/80 backdrop-blur-md ring-0 border-none text-black font-medium p-5 rounded-[32px] w-[280px] outline-none'
       }"
     >
       <button 
         type="button"
         :class="[
-          'w-54 space-x-2 h-13 px-6 rounded-full flex items-center justify-between font-medium text-black outline-none transition-all duration-300 border-2 cursor-pointer',
+          'w-36 space-x-2 h-13 px-6 rounded-full flex items-center justify-between font-medium text-black outline-none transition-all duration-300 border-2 cursor-pointer',
           startDate ? 'border-blue-500' : 'border-transparent',
-          isPopoverOpen ? 'bg-[#DFE3F0]' : 'bg-white hover:bg-[#DFE3F0] focus:bg-[#DFE3F0]'
+          isPopoverOpen ? 'bg-[#E9ECF6]' : 'bg-white hover:bg-[#E9ECF6] focus:bg-[#E9ECF6]'
         ]"
       >
-        <span class="text-base truncate text-left flex-1 mr-2">
-          {{ selectedDateText || 'Pilih Tanggal' }}
+        <span class="text-sm truncate text-left flex-1 mr-2">
+          {{ selectedDateText || 'Tanggal' }}
         </span>
         
         <div class="flex items-center gap-2 shrink-0">
@@ -163,11 +163,11 @@ const isToday = (day: number | null) => {
                 'w-8 h-8 flex items-center justify-center transition-all duration-200 select-none relative',
                 !day ? 'invisible' : 'cursor-pointer', 
                 
-                isStart(day) && !isEnd(day) ? 'bg-[#1D7AFA] text-white font-bold rounded-l-xl rounded-r-md shadow-md scale-105' : '',
-                isEnd(day) && !isStart(day) ? 'bg-[#1D7AFA] text-white font-bold rounded-r-xl rounded-l-md shadow-md scale-105' : '',
-                isStart(day) && isEnd(day) ? 'bg-[#1D7AFA] text-white font-bold rounded-xl shadow-md scale-105' : '',
+                isStart(day) && !isEnd(day) ? 'bg-[#1D7AFA] text-white font-bold rounded-l-xl rounded-r-md scale-105' : '',
+                isEnd(day) && !isStart(day) ? 'bg-[#1D7AFA] text-white font-bold rounded-r-xl rounded-l-md scale-105' : '',
+                isStart(day) && isEnd(day) ? 'bg-[#1D7AFA] text-white font-bold rounded-xl scale-105' : '',
                 
-                inRange(day) ? 'bg-[#DFE3F0]/90 text-black font-medium rounded-md' : '',
+                inRange(day) ? 'bg-[#FFFFFF] text-black font-medium rounded-md' : '',
                 
                 !isStart(day) && !isEnd(day) && !inRange(day) && day ? 'hover:bg-white/40 text-gray-900 rounded-lg' : '',
                 isToday(day) && !isStart(day) && !isEnd(day) && !inRange(day) ? 'bg-white/50 ring-1 ring-white font-bold' : ''

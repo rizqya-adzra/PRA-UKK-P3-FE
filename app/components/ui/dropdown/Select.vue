@@ -23,14 +23,14 @@ const filteredStudents = computed(() => {
 </script>
 
 <template>
-  <div class="w-60">
+  <div>
     <USelectMenu 
       v-model="selectedStudent" 
       :items="filteredStudents" 
       trailing-icon=""
       variant="none"
       :ui="{
-        content: 'bg-[#DFE3F0]/80 backdrop-blur-md ring-0 border-none shadow-lg rounded-[32px] p-3',
+        content: 'bg-[#E9ECF6]/80 backdrop-blur-md ring-0 border-none rounded-[32px] p-3',
         input: 'hidden h-0 w-0 p-0 m-0 border-none', 
         item: 'p-0 cursor-pointer transition-transform duration-200 data-[highlighted]:bg-transparent'
       }"
@@ -39,12 +39,12 @@ const filteredStudents = computed(() => {
         <button 
           type="button"
           :class="[
-            'w-54 space-x-2 h-13 px-6 rounded-full flex items-center justify-between font-medium text-black outline-none transition-all duration-300 cursor-pointer border-2',
+            'w-36 space-x-2 h-13 px-6 rounded-full flex items-center justify-between font-medium text-black outline-none transition-all duration-300 cursor-pointer border-2',
             selectedStudent ? 'border-blue-500' : 'border-transparent',
-            open ? 'bg-[#DFE3F0]' : 'bg-white hover:bg-[#DFE3F0] focus:bg-[#DFE3F0]'
+            open ? 'bg-[#E9ECF6]' : 'bg-white hover:bg-[#E9ECF6] focus:bg-[#E9ECF6]'
           ]"
         >
-        <span class="text-base truncate text-left flex-1 mr-2">
+        <span class="text-sm truncate text-left flex-1 mr-2">
           {{ selectedStudent?.name || 'Siswa' }}
         </span>
           <UIcon 
@@ -75,7 +75,7 @@ const filteredStudents = computed(() => {
       </template>
 
       <template #item="{ item }">
-        <div class="w-full my-1 bg-white rounded-2xl p-4 flex items-center gap-4 shadow-sm text-left transition-all duration-300 hover:bg-[#DFE3F0] cursor-pointer">
+        <div class="w-full my-1 bg-white rounded-2xl p-4 flex items-center gap-4 shadow-sm text-left transition-all duration-300 hover:bg-[#E9ECF6] cursor-pointer">
           <div class="size-12 rounded-full bg-gray-200 shrink-0 border border-gray-100"></div>
           <div class="flex flex-col items-start min-w-0">
             <span class="font-bold text-black text-[15px] leading-tight truncate w-full">
