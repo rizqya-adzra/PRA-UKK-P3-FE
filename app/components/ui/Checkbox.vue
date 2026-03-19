@@ -2,19 +2,21 @@
 const props = withDefaults(defineProps<{
   modelValue?: boolean
   label?: string
+  link?: string
   error?: string
 }>(), {
   modelValue: false,
   label: '',
+  link: '',
   error: ''
 })
 
-const emit = defineEmits(['update:modelValue'])
+// Tambahkan 'open-link' di sini
+const emit = defineEmits(['update:modelValue', 'open-link'])
 </script>
 
 <template>
   <div class="flex flex-col gap-1 w-full">
-    
     <label class="flex items-center gap-3 cursor-pointer group w-fit">
       <div class="relative flex items-center justify-center">
         <input
@@ -48,12 +50,19 @@ const emit = defineEmits(['update:modelValue'])
         :class="error ? 'text-red-500' : 'text-gray-700 group-hover:text-black'"
       >
         {{ label }}
+        <a 
+          v-if="link" 
+          href="#" 
+          @click.prevent="emit('open-link')"
+          class="font-bold text-black hover:text-blue-600 underline duration-300 transition-colors"
+        >
+          {{ link }}
+        </a>
       </span>
     </label>
 
     <span v-if="error" class="text-red-500 text-xs font-medium px-1">
       {{ error }}
     </span>
-
   </div>
 </template>

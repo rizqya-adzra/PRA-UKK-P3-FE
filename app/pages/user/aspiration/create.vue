@@ -24,6 +24,7 @@ const selectedFiles = ref<{ file: File; preview: string }[]>([])
 const agreeTos = ref(false)
 const agreeResponsibility = ref(false)
 const isSubmitting = ref(false)
+const showTosModal = ref(false)
 
 onMounted(async () => {
   if (!auth.user?.profile) {
@@ -169,7 +170,7 @@ const handleSubmit = async () => {
       </div>
 
       <div class="space-y-2 mb-7 mt-4">
-        <UiCheckbox v-model="agreeTos" label="Saya sudah membaca Terms of Service yang diberikan" />
+        <UiCheckbox v-model="agreeTos" label="Saya sudah membaca dan menyetujui yang ada dalam" link="Terms of Service" @open-link="showTosModal = true" />
         <UiCheckbox v-model="agreeResponsibility" label="Saya mengetahui bahwa Aspirasi yang saya buat merupakan tanggung jawab saya" />
       </div>
 
@@ -182,4 +183,8 @@ const handleSubmit = async () => {
       />
     </div>
   </div>
+
+  <UiModalDefault v-model="showTosModal" :title="TOS_DATA.title" maxWidth="max-w-3xl">
+    <UiModalDataToS />
+  </UiModalDefault>
 </template>

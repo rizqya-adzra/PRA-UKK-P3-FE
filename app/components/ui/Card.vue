@@ -40,7 +40,7 @@ const formattedDate = computed(() => {
 </script>
 
 <template>
-  <div class="bg-white rounded-4xl py-5 px-7 min-w-124 max-w-full hover:ring-2 hover:ring-blue-500 transition-all duration-400 cursor-pointer">
+  <div class="bg-white rounded-4xl py-5 px-7 min-w-124 w-full hover:ring-2 hover:ring-blue-500 transition-all duration-400 cursor-pointer">
     
     <p class="font-bold text-lg">{{ report.title }} di {{ report.location }}</p>
     

@@ -9,6 +9,8 @@ definePageMeta({
 
 const authStore = useAuthStore()
 const router = useRouter()
+const showTosModal = ref(false)
+const showPrivacyPolicyModal = ref(false)
 
 const form = ref({
   email: '',
@@ -103,11 +105,19 @@ const handleRegister = async () => {
         <div class="border border-black/10 mt-6"></div>
         
         <div class="flex gap-3 justify-center items-center text-black/40 text-xs mt-4">
-          <p class="cursor-pointer hover:text-black transition-colors">Terms of Service</p>
+          <p class="cursor-pointer hover:text-black transition-colors" @click="showTosModal = true">Terms of Service</p>
           <p>|</p>
-          <p class="cursor-pointer hover:text-black transition-colors">Privacy Policy</p>
+          <p class="cursor-pointer hover:text-black transition-colors" @click="showPrivacyPolicyModal = true">Privacy Policy</p>
         </div>
       </form>
     </div>
   </div>
+
+  <UiModalDefault v-model="showTosModal" :title="TOS_DATA.title" maxWidth="max-w-3xl">
+    <UiModalDataToS />
+  </UiModalDefault>
+
+  <UiModalDefault v-model="showPrivacyPolicyModal" :title="PRIVACY_POLICY.title" maxWidth="max-w-3xl">
+    <UiModalDataPrivacyPolicy />
+  </UiModalDefault>
 </template>

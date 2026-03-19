@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useAspiration } from '~/composables/api/useAspiration'
+import { useRouter } from 'vue-router'
 
 definePageMeta({
   middleware: 'auth',
@@ -10,6 +11,12 @@ const { fetchAspirations, fetchAspirationStats } = useAspiration()
 const { data: response, pending, error, refresh } = await fetchAspirations()
 const { data: stats } = await fetchAspirationStats()
 const listAspirasi = computed(() => response.value?.data || [])
+const router = useRouter()
+
+const goToDetail = (id: string) => {
+  console.log("ID yang diklik:", id)
+  router.push(`/user/aspiration/detail/${id}`)
+}
 </script>
 
 <template>
@@ -64,6 +71,7 @@ const listAspirasi = computed(() => response.value?.data || [])
           v-for="item in listAspirasi.slice(0, 2)" 
           :key="item.id" 
           :report="item" 
+          @click="goToDetail(item.id)" class="cursor-pointer"
         />
       </div>
     </div>

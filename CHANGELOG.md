@@ -37,3 +37,10 @@
 - added new input property
 - added Checkbox and FileUpload in components/ui/
 - modified all dropdown ui components
+
+### V1.0.6
+- added aspiration/detail/[id] in pages/user/
+- added contants.ts in utils for Tos and Privacy Policy data
+- added modal in components/ui
+- added StatusTimeline in components/ui
+- added FilePreviewModal in components/ui
