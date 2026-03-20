@@ -22,7 +22,7 @@ const goToDetail = (id: string) => {
 <template>
   <div class="flex flex-col justify-start items-start gap-14">
 
-    <img src="~/assets/images/user_welcome.jpg" alt="Welcome">
+    <img src="~/assets/images/user_welcome.jpg" alt="Welcome" class="w-full">
 
     <div class="w-full space-y-5">
       <p class="text-3xl font-bold">Bulan Ini Kamu Sudah Berkonstribusi</p>

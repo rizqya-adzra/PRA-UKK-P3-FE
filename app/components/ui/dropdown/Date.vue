@@ -1,12 +1,40 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 
+const props = defineProps<{
+  startDate?: string | null
+  endDate?: string | null
+}>()
+
+const emit = defineEmits(['update:startDate', 'update:endDate'])
+
 const isPopoverOpen = ref(false)
 
-const startDate = ref<Date | null>(null)
-const endDate = ref<Date | null>(null)
+const parseDate = (dateStr?: string | null): Date | null => {
+  if (!dateStr) return null
+  const [y, m, d] = dateStr.split('-').map(Number)
+  return new Date(y, m - 1, d) 
+}
 
-const currentDate = ref(new Date())
+const formatDate = (date: Date | null): string => {
+  if (!date) return ''
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+const internalStart = computed({
+  get: () => parseDate(props.startDate),
+  set: (val) => emit('update:startDate', formatDate(val))
+})
+
+const internalEnd = computed({
+  get: () => parseDate(props.endDate),
+  set: (val) => emit('update:endDate', formatDate(val))
+})
+
+const currentDate = ref(internalStart.value || new Date())
 const days = ['M', 'S', 'S', 'R', 'K', 'J', 'S']
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"]
 
@@ -15,15 +43,15 @@ const currentMonthYear = computed(() => {
 })
 
 const selectedDateText = computed(() => {
-  if (!startDate.value) return null
+  if (!internalStart.value) return null
   
-  const startStr = `${startDate.value.getDate()} ${monthNames[startDate.value.getMonth()]}`
+  const startStr = `${internalStart.value.getDate()} ${monthNames[internalStart.value.getMonth()]}`
   
-  if (!endDate.value) return startStr 
+  if (!internalEnd.value) return startStr 
   
-  const endStr = `${endDate.value.getDate()} ${monthNames[endDate.value.getMonth()]}`
+  const endStr = `${internalEnd.value.getDate()} ${monthNames[internalEnd.value.getMonth()]}`
   
-  if (startDate.value.getTime() === endDate.value.getTime()) return startStr
+  if (internalStart.value.getTime() === internalEnd.value.getTime()) return startStr
   
   return `${startStr} - ${endStr}`
 })
@@ -63,33 +91,33 @@ const selectDate = (day: number | null) => {
 
   const clickedDate = getDateFromDay(day)
 
-  if (!startDate.value || (startDate.value && endDate.value)) {
-    startDate.value = clickedDate
-    endDate.value = null
-  } else if (startDate.value && !endDate.value) {
-    if (clickedDate < startDate.value) {
-      startDate.value = clickedDate
+  if (!internalStart.value || (internalStart.value && internalEnd.value)) {
+    internalStart.value = clickedDate
+    internalEnd.value = null
+  } else if (internalStart.value && !internalEnd.value) {
+    if (clickedDate < internalStart.value) {
+      internalStart.value = clickedDate
     } else {
-      endDate.value = clickedDate
+      internalEnd.value = clickedDate
       isPopoverOpen.value = false
     }
   }
 }
 
 const isStart = (day: number | null) => {
-  if (!day || !startDate.value) return false
-  return getDateFromDay(day).getTime() === startDate.value.getTime()
+  if (!day || !internalStart.value) return false
+  return getDateFromDay(day).getTime() === internalStart.value.getTime()
 }
 
 const isEnd = (day: number | null) => {
-  if (!day || !endDate.value) return false
-  return getDateFromDay(day).getTime() === endDate.value.getTime()
+  if (!day || !internalEnd.value) return false
+  return getDateFromDay(day).getTime() === internalEnd.value.getTime()
 }
 
 const inRange = (day: number | null) => {
-  if (!day || !startDate.value || !endDate.value) return false
+  if (!day || !internalStart.value || !internalEnd.value) return false
   const current = getDateFromDay(day).getTime()
-  return current > startDate.value.getTime() && current < endDate.value.getTime()
+  return current > internalStart.value.getTime() && current < internalEnd.value.getTime()
 }
 
 const isToday = (day: number | null) => {
@@ -111,7 +139,7 @@ const isToday = (day: number | null) => {
         type="button"
         :class="[
           'w-36 space-x-2 h-13 px-6 rounded-full flex items-center justify-between font-medium text-black outline-none transition-all duration-300 border-2 cursor-pointer',
-          startDate ? 'border-blue-500' : 'border-transparent',
+          internalStart ? 'border-blue-500' : 'border-transparent',
           isPopoverOpen ? 'bg-[#E9ECF6]' : 'bg-white hover:bg-[#E9ECF6] focus:bg-[#E9ECF6]'
         ]"
       >
@@ -121,13 +149,13 @@ const isToday = (day: number | null) => {
         
         <div class="flex items-center gap-2 shrink-0">
           <UIcon 
-            v-if="startDate"
+            v-if="internalStart"
             name="i-lucide-x" 
             class="size-5 text-gray-400 hover:text-red-500 transition-colors cursor-pointer" 
-            @click.prevent.stop="startDate = null; endDate = null"
+            @click.prevent.stop="internalStart = null; internalEnd = null"
           />
           <UIcon 
-            v-if="!startDate"
+            v-if="!internalStart"
             name="i-lucide-calendar" 
             class="size-5 text-black"
           />
@@ -136,6 +164,7 @@ const isToday = (day: number | null) => {
 
       <template #content>
         <div class="w-full">
+          <p class="text-xs text-center mb-3 text-gray-400">pilih tanggal awal & akhir</p>
           <div class="flex items-center justify-between mb-4 px-2">
             <UIcon 
               name="i-lucide-chevron-left" 

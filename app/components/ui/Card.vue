@@ -40,18 +40,18 @@ const formattedDate = computed(() => {
 </script>
 
 <template>
-  <div class="bg-white rounded-4xl py-5 px-7 min-w-124 w-full hover:ring-2 hover:ring-blue-500 transition-all duration-400 cursor-pointer">
+  <div class="bg-white rounded-4xl py-5 px-7 w-full hover:ring-2 hover:ring-blue-500 transition-all duration-400 cursor-pointer">
     
-    <p class="font-bold text-lg">{{ report.title }} di {{ report.location }}</p>
+    <p class="font-bold text-lg truncate">{{ report.title }}</p>
     
-    <div class="flex justify-between items-center">
-      <div class="space-x-2 mt-1">
+    <div class="flex justify-between items-end">
+      <div class="space-x-2 mt-2">
         <UiLabel :text="report.category_detail.name" variant="solid" color="purple" />
         
         <UiLabel :text="report.status_display" variant="outline" color="orange" />
       </div>
       
-      <p class="text-sm">{{ formattedDate }}</p>
+      <p class="text-xs">{{ formattedDate }}</p>
     </div>
     
     <svg class="w-full text-gray-300 my-3" height="4" xmlns="http://www.w3.org/2000/svg">
@@ -66,15 +66,20 @@ const formattedDate = computed(() => {
         stroke-linecap="round" 
       />
     </svg>
-    
-    <p class="text-sm my-6">{{ report.description }}</p>
+
+    <div class="my-6">
+      <p class="text-sm uppercase text-gray-400 w-max">{{ report.location }}</p>
+      <p class="">{{ report.description }}</p>
+    </div>
     
     <div class="flex justify-between items-center text-sm">
       
-      <div class="flex items-center gap-1 mt-1">
+      <div class="flex items-center gap-1 mt-1 text-gray-400">
         <UIcon name="i-lucide-file" class="size-4" />
         <p>{{ report.attachments ? report.attachments.length : 0 }}</p>
       </div>
+
+
       
       <p class="text-gray-400">- {{ report.student_info.name }}</p>
       

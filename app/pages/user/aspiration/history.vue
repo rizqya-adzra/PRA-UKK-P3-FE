@@ -10,7 +10,7 @@ definePageMeta({
 })
 
 const router = useRouter()
-const { fetchAspirations } = useAspiration()
+const { fetchAspirationHistories } = useAspiration()
 
 const {
   searchParams,
@@ -25,7 +25,7 @@ const {
   nextPage: triggerNextPage
 } = useFilterPagination()
 
-const { data: response, pending } = await fetchAspirations(apiQuery)
+const { data: response, pending} = await fetchAspirationHistories(apiQuery)
 
 const listAspirasi = computed(() => response.value?.data || [])
 const totalPages = computed(() => response.value?.total_pages || 1)
@@ -47,22 +47,8 @@ const goToDetail = (id: string) => {
 </script>
 
 <template>
-  <div class="border-6 border-white p-6 rounded-4xl flex justify-between items-center">
-    <p class="font-bold">Tambah Aspirasi yang <br> ingin kamu sampaikan</p>
-    <NuxtLink to="/user/aspiration/create">
-      <UiButton label="BUAT ASPIRASI" variant="imperative" color="gradient" />
-    </NuxtLink>
-  </div>
-
-  <svg class="w-full text-gray-300 my-14" height="4" xmlns="http://www.w3.org/2000/svg">
-    <line 
-      x1="2" y1="2" x2="100%" y2="2" 
-      stroke="currentColor" stroke-width="2" stroke-dasharray="16 20" stroke-linecap="round" 
-    />
-  </svg>
-
   <div class="flex flex-col items-center justify-center gap-7">
-    <p class="text-3xl font-bold text-center">Semua List Aspirasi</p>
+    <p class="text-3xl font-bold text-center">Arsip History</p>
     <div class="space-y-1 w-full max-w-2xl">
       <UiInput 
         v-model="searchParams" 
@@ -76,7 +62,6 @@ const goToDetail = (id: string) => {
           v-model:endDate="endDateParams" 
         />    
         <UiDropdownCategory v-model="categoryParams" />
-        <UiDropdownStatus v-model="statusParams" />    
       </div>
     </div>
   </div>

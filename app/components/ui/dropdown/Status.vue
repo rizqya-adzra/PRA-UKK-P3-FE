@@ -1,12 +1,27 @@
 <script setup lang="ts">
+const props = defineProps<{
+  modelValue?: string | number
+}>()
+
+const emit = defineEmits(['update:modelValue'])
+
 const statuses = [
-  { id: 1, label: 'Menunggu' as const },
-  { id: 2, label: 'Diproses' as const },
-  { id: 3, label: 'Selesai' as const },
-  { id: 4, label: 'Dibatalkan' as const }
+  { id: 'menunggu', label: 'Menunggu' as const },
+  { id: 'proses', label: 'Proses' as const },
+  { id: 'selesai', label: 'Selesai' as const },
+  { id: 'dibatalkan', label: 'Dibatalkan' as const }
 ]
 
-const selected = ref(statuses[0])
+const initialStatus = statuses.find(c => c.id === props.modelValue) || undefined
+const selected = ref(initialStatus)
+
+watch(selected, (newValue) => {
+  if (newValue) {
+    emit('update:modelValue', newValue.id)
+  } else {
+    emit('update:modelValue', '')
+  }
+})
 </script>
 
 <template>

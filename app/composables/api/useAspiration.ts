@@ -1,5 +1,15 @@
 import { useAuthStore } from '~/stores/auth'
 
+export interface AspirationQuery {
+  page?: number | string
+  search?: string
+  status?: string
+  category?: string
+  start_date?: string
+  end_date?: string
+  [key: string]: any
+}
+
 export interface CategoryDetail {
   id: string
   name: string
@@ -55,6 +65,8 @@ export interface AspirationResponse {
   message: string
   count: number
   data: Aspiration[]
+  current_page?: number  
+  total_pages?: number
 }
 
 export interface AspirationStats {
@@ -82,16 +94,19 @@ export const useAspiration = () => {
     }
   }
 
-  const fetchAspirations = async () => {
+  const fetchAspirations = async (queryParams?: any) => {
     return useFetch<AspirationResponse>('/aspiration/list/', {
+      key: 'aspirations-list',
       baseURL: config.public.apiBase, 
       headers: getHeaders(),
+      query: queryParams,
       transform: (response) => response, 
     })
   }
 
   const fetchAspirationDetail = async (id: string) => {
     return useFetch<{ success: boolean; data: Aspiration }>(`/aspiration/list/${id}/`, {
+      key: `aspiration-detail-${id}`,
       baseURL: config.public.apiBase,
       headers: getHeaders(),
     })
@@ -112,10 +127,22 @@ export const useAspiration = () => {
     }
   }
 
-  const fetchAspirationStats = async () => {
+  const fetchAspirationStats = async (queryParams?: any) => {
     return useFetch<StatsResponse>('/aspiration/stats/', {
+      key: 'aspiration-stats',
       baseURL: config.public.apiBase,
       headers: getHeaders(),
+      query: queryParams,
+    })
+  }
+
+  const fetchAspirationHistories = async (queryParams?: any) => {
+    return useFetch<AspirationResponse>('/aspiration/history/', {
+      key: 'aspiration-histories',
+      baseURL: config.public.apiBase, 
+      headers: getHeaders(),
+      query: queryParams,
+      transform: (response) => response, 
     })
   }
 
@@ -124,5 +151,6 @@ export const useAspiration = () => {
     fetchAspirationDetail,
     createAspiration,
     fetchAspirationStats,
+    fetchAspirationHistories
   }
 }

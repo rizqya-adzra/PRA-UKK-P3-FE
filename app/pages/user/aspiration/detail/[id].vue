@@ -70,7 +70,7 @@ const statusMessage = computed(() => {
         </p>
       </div>
 
-      <div class="bg-white rounded-4xl py-8 md:py-10 px-6 md:px-12 mt-4 mb-14 space-y-5 w-full max-w-5xl">
+      <div class="bg-white rounded-4xl py-8 md:py-10 px-6 md:px-12 mt-4 mb-14 space-y-5 w-full">
         
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div class="w-full flex items-center gap-3 text-left">

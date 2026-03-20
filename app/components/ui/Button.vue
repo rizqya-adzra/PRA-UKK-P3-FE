@@ -24,7 +24,7 @@ const colorVariants: Record<ButtonColor, string> = {
 
 const sizeVariants: Record<ButtonVariant, string> = {
   primary: 'h-[60px] w-full font-bold text-md', 
-  export: 'h-[34px] w-[240px] font-semibold text-xs group',
+  export: 'h-[40px] w-[240px] font-semibold text-sm group',
   imperative: 'h-[66px] w-[260px] font-semibold text-md'
 }
 

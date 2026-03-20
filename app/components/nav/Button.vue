@@ -8,8 +8,8 @@ const props = withDefaults(defineProps<{
 
 const classes = computed(() => [
   'px-4 py-2 rounded-[16px]',
-  'font-bold text-black',
-  'transition-all duration-200',
+  'font-bold text-black text-sm',
+  'transition-all duration-200 cursor-pointer',
   props.isActive ? 'bg-[#DFE3F0]' : 'bg-transparent hover:bg-gray-100'
 ])
 </script>

@@ -86,6 +86,13 @@ const handleSubmit = async () => {
     })
 
     await createAspiration(formData)
+
+    await Promise.all([
+      refreshNuxtData('aspirations-list'),
+      refreshNuxtData('aspiration-stats'),
+      refreshNuxtData('aspiration-histories'),
+      refreshNuxtData('notifications-list')
+    ])
     
     alert("Aspirasi berhasil dikirim!")
     
@@ -106,9 +113,7 @@ const handleSubmit = async () => {
 
 <template>
   <div class="flex flex-col items-center">
-    <p class="text-3xl font-bold">Buat <span class="text-electric-blue">Aspirasi</span></p>
-    
-    <div class="bg-white rounded-4xl py-10 px-12 mt-8 mb-16 space-y-5 w-full min-w-4xl max-w-4xl">
+    <div class="bg-white rounded-4xl py-10 px-12 mt-3 mb-16 space-y-5 w-full">
       <div class="w-full flex items-center gap-3 text-left">
         <img 
           :src="auth?.user?.image || defaultProfileImage" 

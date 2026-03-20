@@ -44,3 +44,13 @@
 - added modal in components/ui
 - added StatusTimeline in components/ui
 - added FilePreviewModal in components/ui
+
+### V1.0.7
+- added useFilterPagination.ts and useNotification.ts
+- added markAllAsRead in useNotification.ts
+- added filter and pagination in useAspiration.ts
+- added Pagination.vue in components/ui/dropdown/
+- added History Page in user/aspiration/
+- added Notification Page in user/
+- added videos folder in assets/
+- modified Landing page with new video for background
