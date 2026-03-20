@@ -146,11 +146,65 @@ export const useAspiration = () => {
     })
   }
 
+  const exportAspirationsExcel = async (queryParams?: any) => {
+    try {
+      const response = await $fetch<Blob>('/aspiration/list/', {
+        baseURL: config.public.apiBase,
+        headers: {
+          Authorization: `Token ${authStore.token}` 
+        },
+        query: { ...queryParams, export: 'excel' }, 
+        responseType: 'blob', 
+      })
+      return response
+    } catch (error) {
+      console.error('Gagal mengekspor data:', error)
+      throw error
+    }
+  }
+
+  const exportAspirationHistoriesExcel = async (queryParams?: any) => {
+    try {
+      const response = await $fetch<Blob>('/aspiration/history/', {
+        baseURL: config.public.apiBase,
+        headers: {
+          Authorization: `Token ${authStore.token}` 
+        },
+        query: { ...queryParams, export: 'excel' }, 
+        responseType: 'blob', 
+      })
+      return response
+    } catch (error) {
+      console.error('Gagal mengekspor data:', error)
+      throw error
+    }
+  }
+
+  const exportAspirationPDF = async (id: string) => {
+    try {
+      const response = await $fetch<Blob>(`/aspiration/list/${id}/`, {
+        baseURL: config.public.apiBase,
+        headers: {
+          Authorization: `Token ${authStore.token}` 
+        },
+        query: { export: 'pdf' }, 
+        responseType: 'blob', 
+      })
+      return response
+    } catch (error) {
+      console.error('Gagal mengekspor PDF:', error)
+      throw error
+    }
+  }
+
   return {
     fetchAspirations,
     fetchAspirationDetail,
     createAspiration,
     fetchAspirationStats,
-    fetchAspirationHistories
+    fetchAspirationHistories,
+    exportAspirationsExcel,
+    exportAspirationHistoriesExcel,
+    exportAspirationPDF
   }
 }

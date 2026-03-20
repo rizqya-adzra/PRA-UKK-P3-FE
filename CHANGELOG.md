@@ -54,3 +54,8 @@
 - added Notification Page in user/
 - added videos folder in assets/
 - modified Landing page with new video for background
+
+### V1.0.8
+- added export excel in user/aspiration/list-page and user/aspiration/history 
+- added export pdf in user/aspiration/detail/[id]
+- added exportAspirationsExcel, exportAspirationHistoriesExcel, and exportAspirationPDF in useAspiration.ts

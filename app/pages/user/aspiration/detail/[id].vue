@@ -10,14 +10,13 @@ definePageMeta({
 })
 
 const route = useRoute()
-const { fetchAspirationDetail } = useAspiration()
+const { fetchAspirationDetail, exportAspirationPDF } = useAspiration() 
 const aspirationId = route.params.id as string
 
 const { data: response, pending, error } = await fetchAspirationDetail(aspirationId)
 const aspiration = computed(() => response.value?.data)
 
 const fileModalRef = ref<any>(null)
-
 
 const formatDate = (isoString: string | undefined) => {
   if (!isoString) return '-'
@@ -46,6 +45,34 @@ const statusMessage = computed(() => {
   
   return ''
 })
+
+const isExportModalOpen = ref(false)
+const isExporting = ref(false)
+
+const executeExportPDF = async () => {
+  if (!aspiration.value) return
+
+  isExporting.value = true
+  try {
+    const blob = await exportAspirationPDF(aspirationId)
+    const url = window.URL.createObjectURL(blob)
+    
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', `Bukti_Aspirasi_${aspiration.value.report_id}.pdf`) 
+    
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+    window.URL.revokeObjectURL(url)
+    
+    isExportModalOpen.value = false
+  } catch (error) {
+    console.error("Terjadi kesalahan saat mengunduh PDF:", error)
+  } finally {
+    isExporting.value = false
+  }
+}
 </script>
 
 <template>
@@ -64,7 +91,7 @@ const statusMessage = computed(() => {
 
     <div class="flex flex-col items-center justify-center text-center mt-10 min-w-full">
       <div class="flex flex-col-reverse md:flex-row justify-between items-center w-full px-4 md:px-12 gap-4">
-        <UiButton label="Export to PDF" variant="export" color="red" />
+        <UiButton label="Export to PDF" variant="export" color="red" @click="isExportModalOpen = true" />
         <p class="text-sm md:text-base"> 
           No. Aspirasi: <span class="font-semibold text-blue-500">{{ aspiration.report_id }}</span> 
         </p>
@@ -194,6 +221,35 @@ const statusMessage = computed(() => {
     </div>
 
     <UiFilePreviewModal ref="fileModalRef" />
+    <UiModalDefault 
+        v-model="isExportModalOpen" 
+        title="Export Data ke PDF" 
+        maxWidth="max-w-xl"
+      >
+        <div class="space-y-4">
+          <p class="text-gray-600">
+            Kamu akan mengunduh tanda bukti laporan aspirasi ini ke dalam format PDF. 
+          </p>
+          <div class="bg-gray-50 p-4 rounded-xl text-sm text-gray-700 border border-gray-100">
+            <p class="font-medium mb-1">Informasi Unduhan:</p>
+            <ul class="list-disc pl-4 space-y-1">
+              <li>Nomor Laporan: <strong>{{ aspiration?.report_id }}</strong></li>
+              <li>Judul: <strong>{{ aspiration?.title }}</strong></li>
+            </ul>
+          </div>
+        </div>
 
+        <template #footer>
+          <div class="flex items-center justify-end gap-3 w-full">
+            <UiButton 
+              label="Unduh Sekarang" 
+              variant="imperative" 
+              color="red" 
+              @click="executeExportPDF" 
+              :loading="isExporting"
+            />
+          </div>
+        </template>
+      </UiModalDefault>
   </div>
 </template>
