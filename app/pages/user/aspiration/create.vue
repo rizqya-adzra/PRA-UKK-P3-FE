@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed, watch } from 'vue'
+import { onBeforeRouteLeave } from 'vue-router'
 import { useAuthStore } from '~/stores/useAuthStore'
 import { useAspiration } from '~/composables/api/useAspiration' 
 import defaultProfileImage from '~/assets/images/core_profile.jpg'
@@ -26,6 +27,57 @@ const agreeResponsibility = ref(false)
 const isSubmitting = ref(false)
 const showTosModal = ref(false)
 
+const alertModal = ref({
+  isOpen: false,
+  title: '',
+  message: '',
+  isSuccess: false
+})
+
+const showAlert = (title: string, message: string, isSuccess = false) => {
+  alertModal.value = { isOpen: true, title, message, isSuccess }
+}
+
+const handleCloseAlert = () => {
+  alertModal.value.isOpen = false
+  if (alertModal.value.isSuccess) {
+    navigateTo('/user/aspiration/list-page')
+  }
+}
+
+const leaveModal = ref(false)
+let leaveNext: Function | null = null
+
+const isFormDirty = computed(() => {
+  return form.value.title !== '' ||
+         form.value.location !== '' ||
+         form.value.description !== '' ||
+         form.value.category_id !== '' ||
+         selectedFiles.value.length > 0
+})
+
+onBeforeRouteLeave((to, from, next) => {
+  if (!isFormDirty.value || isSubmitting.value || alertModal.value.isSuccess) {
+    next()
+    return
+  }
+  
+  leaveModal.value = true
+  leaveNext = next
+})
+
+const confirmLeave = () => {
+  leaveModal.value = false
+  if (leaveNext) leaveNext() 
+}
+
+watch(leaveModal, (isOpen) => {
+  if (!isOpen && leaveNext) {
+    leaveNext(false)
+    leaveNext = null
+  }
+})
+
 onMounted(async () => {
   if (!auth.user?.profile) {
     try {
@@ -38,17 +90,14 @@ onMounted(async () => {
 
 const handleFileAdded = (file: File) => {
   if (selectedFiles.value.length >= 5) {
-    alert("Maksimal hanya 5 file yang diizinkan!")
+    showAlert("Batas File", "Maksimal hanya 5 file yang diizinkan!")
     return
   }
 
   const isImage = file.type.startsWith('image/')
   const preview = isImage ? URL.createObjectURL(file) : ''
 
-  selectedFiles.value.push({
-    file,
-    preview
-  })
+  selectedFiles.value.push({ file, preview })
 }
 
 const removeFile = (index: number) => {
@@ -63,12 +112,12 @@ const removeFile = (index: number) => {
 
 const handleSubmit = async () => {
   if (!form.value.title || !form.value.location || !form.value.description || !form.value.category_id) {
-    alert("Mohon lengkapi semua data form (Judul, Lokasi, Deskripsi, Kategori)!")
+    showAlert("Data Tidak Lengkap", "Mohon lengkapi semua data form (Judul, Lokasi, Deskripsi, Kategori)!")
     return
   }
   
   if (!agreeTos.value || !agreeResponsibility.value) {
-    alert("Kamu harus menyetujui Syarat & Ketentuan serta Tanggung Jawab aspirasi!")
+    showAlert("Persetujuan Dibutuhkan", "Kamu harus menyetujui Syarat & Ketentuan serta Tanggung Jawab aspirasi!")
     return
   }
 
@@ -94,17 +143,15 @@ const handleSubmit = async () => {
       refreshNuxtData('notifications-list')
     ])
     
-    alert("Aspirasi berhasil dikirim!")
-    
+    showAlert("Berhasil", "Aspirasi kamu berhasil dikirim!", true)
+
     selectedFiles.value.forEach(item => {
       if(item.preview) URL.revokeObjectURL(item.preview)
     })
-    
-    navigateTo('/user/aspiration/list-page')
 
   } catch (error) {
     console.error("Error submit aspirasi:", error)
-    alert("Gagal mengirim aspirasi. Coba lagi!")
+    showAlert("Terjadi Kesalahan", "Gagal mengirim aspirasi. Coba lagi!")
   } finally {
     isSubmitting.value = false
   }
@@ -123,10 +170,10 @@ const handleSubmit = async () => {
         
         <div class="flex flex-col items-start min-w-0">
           <span class="font-bold text-black text-[15px] leading-tight truncate w-full">
-            {{ auth.user?.profile?.name || '-' }}
+            {{ auth.user?.name || '-' }}
           </span>
           <span class="text-xs text-gray-500 mt-1 font-medium">
-            {{ auth.user?.profile?.nis || '-' }} • {{ auth.user?.profile?.rombel || '-' }}
+            {{ auth.user?.nis || '-' }} • {{ auth.user?.rombel || '-' }} • {{ auth.user?.rayon || '-' }}
           </span>
         </div>
       </div>
@@ -157,7 +204,7 @@ const handleSubmit = async () => {
 
             <button 
               @click="removeFile(index)"
-              class="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+              class="absolute top-1 right-1 bg-black text-white rounded-full w-7 h-7 p-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
             >
               <UIcon name="i-lucide-x" class="size-4" />
             </button>
@@ -189,7 +236,23 @@ const handleSubmit = async () => {
     </div>
   </div>
 
-  <UiModalDefault v-model="showTosModal" :title="TOS_DATA.title" maxWidth="max-w-3xl">
+  <UiModalDefault v-model="showTosModal" :title="TOS_DATA?.title || 'Terms of Service'" maxWidth="max-w-3xl">
     <UiModalDataToS />
   </UiModalDefault>
+
+  <UiModalDefault v-model="alertModal.isOpen" :title="alertModal.title" maxWidth="max-w-md" @update:model-value="(val) => !val && handleCloseAlert()">
+    <p class="text-gray-600 text-[15px]">{{ alertModal.message }}</p>
+  </UiModalDefault>
+
+  <UiModalDefault v-model="leaveModal" title="Peringatan" maxWidth="max-w-md">
+    <div class="flex flex-col gap-6 p-2">
+      <p class="text-gray-600 text-[15px]">
+        Kamu belum menyelesaikan pengisian form. Yakin ingin keluar? Perubahan tidak akan disimpan.
+      </p>
+      <div class="flex justify-end gap-3">
+        <UiButton label="Ya, Keluar" color="red" @click="confirmLeave" />
+      </div>
+    </div>
+  </UiModalDefault>
+
 </template>

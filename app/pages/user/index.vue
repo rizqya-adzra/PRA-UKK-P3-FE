@@ -66,7 +66,7 @@ const goToDetail = (id: string) => {
         <p class="text-center">Masih kosong nih yuk bikin dulu!</p>
       </div>
 
-      <div v-else class="flex gap-2">
+      <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <UiCard 
           v-for="item in listAspirasi.slice(0, 2)" 
           :key="item.id" 

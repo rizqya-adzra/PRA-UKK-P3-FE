@@ -69,20 +69,17 @@ const formattedDate = computed(() => {
 
     <div class="my-6">
       <p class="text-sm uppercase text-gray-400 w-max">{{ report.location }}</p>
-      <p class="">{{ report.description }}</p>
+      <p class="truncate">{{ report.description }}</p>
     </div>
     
     <div class="flex justify-between items-center text-sm">
-      
       <div class="flex items-center gap-1 mt-1 text-gray-400">
         <UIcon name="i-lucide-file" class="size-4" />
         <p>{{ report.attachments ? report.attachments.length : 0 }}</p>
       </div>
 
-
-      
       <p class="text-gray-400">- {{ report.student_info.name }}</p>
-      
     </div>
+
   </div>
 </template>

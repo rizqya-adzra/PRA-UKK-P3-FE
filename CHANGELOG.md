@@ -62,3 +62,6 @@
 
 ### V1.0.9
 - added Profile Page in user/profile
+
+### V1.0.10
+- modified alert in user/aspiration/create
