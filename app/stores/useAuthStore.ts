@@ -14,6 +14,7 @@ interface User {
   name?: string
   nis?: number | string
   rombel?: string
+  rayon?: string 
   image?: string | null
   [key: string]: any 
 }
@@ -133,9 +134,15 @@ export const useAuthStore = defineStore('auth', {
         })
 
         if (response.success && response.data) {
+          const userData = { ...response.data }
+          if (userData.profile) {
+             Object.assign(userData, userData.profile)
+             delete userData.profile
+          }
+
           this.user = {
             ...this.user,
-            ...response.data
+            ...userData
           }
           return response
         }
@@ -144,6 +151,57 @@ export const useAuthStore = defineStore('auth', {
         console.error('Failed to fetch profile:', err)
         const apiResponse = err.data || {}
         this.error = apiResponse?.message || 'Gagal mengambil data profil'
+        
+        throw apiResponse
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async updateProfile(formData: FormData | Record<string, any>) {
+      if (!this.token) return null
+
+      this.loading = true
+      this.error = null
+      this.message = null
+      this.validationErrors = {}
+      const apiFetch = useApi()
+
+      try {
+        const response = await apiFetch<ApiResponse>('profile/', {
+          method: 'PUT',
+          headers: {
+            Authorization: `Token ${this.token}`,
+            Accept: 'application/json',
+          },
+          body: formData
+        })
+
+        if (response.success && response.data) {
+           this.message = response.message || 'Profil berhasil diperbarui'
+           
+           const userData = { ...response.data }
+           if (userData.profile) {
+              Object.assign(userData, userData.profile)
+              delete userData.profile
+           }
+
+           this.user = {
+             ...this.user,
+             ...userData
+           }
+
+           return response
+        }
+      } catch (err: any) {
+        console.error('Failed to update profile:', err)
+        const apiResponse = err.data || {}
+        const errorMsg = apiResponse?.message || 'Gagal memperbarui profil'
+        
+        this.error = errorMsg
+        if (apiResponse?.errors) {
+            this.validationErrors = apiResponse.errors
+        }
         
         throw apiResponse
       } finally {

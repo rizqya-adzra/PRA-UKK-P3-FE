@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useAuthStore } from '~/stores/auth'
+import { useAuthStore } from '~/stores/useAuthStore'
 import { useAspiration } from '~/composables/api/useAspiration' 
 import defaultProfileImage from '~/assets/images/core_profile.jpg'
 

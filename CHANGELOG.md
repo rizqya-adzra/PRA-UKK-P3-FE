@@ -59,3 +59,6 @@
 - added export excel in user/aspiration/list-page and user/aspiration/history 
 - added export pdf in user/aspiration/detail/[id]
 - added exportAspirationsExcel, exportAspirationHistoriesExcel, and exportAspirationPDF in useAspiration.ts
+
+### V1.0.9
+- added Profile Page in user/profile

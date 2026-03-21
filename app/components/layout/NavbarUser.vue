@@ -39,7 +39,9 @@ const unreadCount = computed(() => {
         <NavIcon icon-name="i-lucide-bell" :badge-count="unreadCount" />
       </NuxtLink>
       <div class="border border-black/10 h-8"></div>
-      <NavIcon icon-name="i-lucide-user" />
+      <NuxtLink to="/user/profile/">
+        <NavIcon icon-name="i-lucide-user" />
+      </NuxtLink>
     </div>
 
   </header>
