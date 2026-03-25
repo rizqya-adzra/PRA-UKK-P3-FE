@@ -10,6 +10,7 @@ export function useFilterPagination() {
   const statusParams = ref(route.query.status?.toString() || '')
   const startDateParams = ref(route.query.start_date?.toString() || '')
   const endDateParams = ref(route.query.end_date?.toString() || '')
+  const selectParams = ref(route.query.user?.toString() || '')
   
   const pageParams = ref(Number(route.query.page) || 1)
   const limitParams = ref(Number(route.query.page_size) || 10)
@@ -24,6 +25,7 @@ export function useFilterPagination() {
     if (statusParams.value) query.status = statusParams.value
     if (startDateParams.value) query.start_date = startDateParams.value
     if (endDateParams.value) query.end_date = endDateParams.value
+    if (selectParams.value) query.user = selectParams.value
     
     if (pageParams.value > 1) query.page = pageParams.value
     if (limitParams.value !== 10) query.page_size = limitParams.value
@@ -39,7 +41,7 @@ export function useFilterPagination() {
     if (pageParams.value < totalPages) pageParams.value++
   }
 
-  watch([categoryParams, statusParams, startDateParams, endDateParams, limitParams], () => {
+  watch([categoryParams, statusParams, startDateParams, endDateParams, selectParams, limitParams], () => {
     applyFilter(true) 
   })
 
@@ -65,6 +67,7 @@ export function useFilterPagination() {
     endDateParams,
     pageParams,
     limitParams,
+    selectParams, 
     
     apiQuery,
     prevPage,

@@ -236,6 +236,41 @@ export const useAuthStore = defineStore('auth', {
 
         return navigateTo('/login')
       }
-    }
+    },
+
+    async fetchAllUsers(query: string = '') {
+      if (!this.token) {
+        throw new Error('Tidak ada akses (Token hilang).')
+      }
+      
+      this.loading = true
+      this.error = null
+      const apiFetch = useApi()
+
+      try {
+        const endpoint = query ? `user/list/?${query}` : 'user/list/'
+        
+        const response = await apiFetch<ApiResponse<User[]>>(endpoint, {
+          method: 'GET',
+          headers: {
+            Authorization: `Token ${this.token}`, 
+            Accept: 'application/json',
+          }
+        })
+
+        if (response.success && response.data) {
+          return response
+        }
+
+      } catch (err: any) {
+        console.error('Failed to fetch all users:', err)
+        const apiResponse = err.data || {}
+        this.error = apiResponse?.message || 'Gagal mengambil daftar pengguna'
+        
+        throw apiResponse
+      } finally {
+        this.loading = false
+      }
+    },
   }
 })

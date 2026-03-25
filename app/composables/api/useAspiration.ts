@@ -73,6 +73,15 @@ export interface AspirationStats {
   total: number
   selesai: number
   proses: number
+  menunggu: number
+}
+
+export interface AspirationCategoryStats {
+  fasilitas: number
+  lingkungan: number
+  pendidikan: number
+  karakter: number
+  ibadah: number
 }
 
 export interface StatsResponse {
@@ -82,6 +91,15 @@ export interface StatsResponse {
   count: number
   data: AspirationStats 
 }
+
+export interface CategoryStatsResponse {
+  success: boolean
+  status_code: number
+  message: string
+  count: number
+  data: AspirationCategoryStats 
+}
+
 
 export const useAspiration = () => {
   const config = useRuntimeConfig()
@@ -127,9 +145,33 @@ export const useAspiration = () => {
     }
   }
 
+  const createAspirationProgress = async (formData: FormData | Record<string, any>) => {
+    try {
+      const response = await $fetch('/aspiration/progress/', {
+        baseURL: config.public.apiBase,
+        method: 'POST',
+        headers: getHeaders(),
+        body: formData,
+      })
+      return response
+    } catch (error) {
+      console.error('Failed to create aspiration:', error)
+      throw error
+    }
+  }
+
   const fetchAspirationStats = async (queryParams?: any) => {
     return useFetch<StatsResponse>('/aspiration/stats/', {
       key: 'aspiration-stats',
+      baseURL: config.public.apiBase,
+      headers: getHeaders(),
+      query: queryParams,
+    })
+  }
+
+  const fetchAspirationCategoryStats = async (queryParams?: any) => {
+    return useFetch<CategoryStatsResponse>('/aspiration/category-stats/', {
+      key: 'aspiration-category-stats',
       baseURL: config.public.apiBase,
       headers: getHeaders(),
       query: queryParams,
@@ -201,7 +243,9 @@ export const useAspiration = () => {
     fetchAspirations,
     fetchAspirationDetail,
     createAspiration,
+    createAspirationProgress,
     fetchAspirationStats,
+    fetchAspirationCategoryStats,
     fetchAspirationHistories,
     exportAspirationsExcel,
     exportAspirationHistoriesExcel,

@@ -65,3 +65,12 @@
 
 ### V1.0.10
 - modified alert in user/aspiration/create
+
+### V1.0.11
+- added Admin pages
+- added CardMini.vue
+- added dashboard.vue, notification.vue, and profile.vue in ./pages/admin/
+- added history.vue, and list-page.vue in ./pages/admin/aspiration/
+- added [id].vue in ./pages/admin/aspiration/detail/
+- added useFormUtils.ts, useFormatter.ts, useExportPDF.ts in ./composables/
+- modified SidebarAdmin.vue

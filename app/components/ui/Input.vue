@@ -1,5 +1,5 @@
 <script setup lang="ts">
-type InputVariant = 'auth' | 'search' | 'gray'
+type InputVariant = 'auth' | 'search' | 'gray' | 'white'
 
 const props = withDefaults(defineProps<{
   modelValue?: string
@@ -40,6 +40,13 @@ const inputVariants: Record<InputVariant, string> = {
     'bg-gray-100 text-black border border-transparent',
     'focus:border-gray-300 focus:ring-1 focus:ring-gray-300 focus:bg-white',
     'placeholder:text-gray-400 outline-none transition-all duration-300'
+  ].join(' '),
+
+  white: [
+    'h-[60px] w-full rounded-4xl px-6',
+    'bg-white text-black border border-transparent',
+    'focus:border-gray-300 focus:ring-1 focus:ring-gray-300 focus:bg-white',
+    'placeholder:text-gray-500 outline-none transition-all duration-300'
   ].join(' ')
 }
 </script>

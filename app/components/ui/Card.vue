@@ -42,7 +42,7 @@ const formattedDate = computed(() => {
 <template>
   <div class="bg-white rounded-4xl py-5 px-7 w-full hover:ring-2 hover:ring-blue-500 transition-all duration-400 cursor-pointer">
     
-    <p class="font-bold text-lg truncate">{{ report.title }}</p>
+    <p class="font-bold text-lg truncate">{{ report?.title }}</p>
     
     <div class="flex justify-between items-end">
       <div class="space-x-2 mt-2">
@@ -51,7 +51,7 @@ const formattedDate = computed(() => {
         <UiLabel :text="report.status_display" variant="outline" color="orange" />
       </div>
       
-      <p class="text-xs">{{ formattedDate }}</p>
+      <p class="text-xs">{{ formattedDate || '-' }}</p>
     </div>
     
     <svg class="w-full text-gray-300 my-3" height="4" xmlns="http://www.w3.org/2000/svg">
@@ -68,8 +68,8 @@ const formattedDate = computed(() => {
     </svg>
 
     <div class="my-6">
-      <p class="text-sm uppercase text-gray-400 w-max">{{ report.location }}</p>
-      <p class="truncate">{{ report.description }}</p>
+      <p class="text-sm uppercase text-gray-400 w-max">{{ report?.location  || '-' }}</p>
+      <p class="truncate">{{ report?.description || '-' }}</p>
     </div>
     
     <div class="flex justify-between items-center text-sm">
@@ -78,7 +78,7 @@ const formattedDate = computed(() => {
         <p>{{ report.attachments ? report.attachments.length : 0 }}</p>
       </div>
 
-      <p class="text-gray-400">- {{ report.student_info.name }}</p>
+      <p class="text-gray-400">- {{ report?.student_info?.name || 'No Name' }}</p>
     </div>
 
   </div>

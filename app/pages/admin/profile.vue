@@ -1,0 +1,162 @@
+<script setup lang="ts">
+import { useAuthStore } from '~/stores/useAuthStore'
+import { useAspiration } from '~/composables/api/useAspiration'
+
+definePageMeta({
+  middleware: 'auth',
+  layout: 'admin'
+})
+
+const auth = useAuthStore()
+const showTosModal = ref(false)
+const showPrivacyPolicyModal = ref(false)
+const isLogoutModalOpen = ref(false)
+const { fetchAspirationStats } = useAspiration()
+
+const isEditProfileModalOpen = ref(false)
+const profileForm = ref({
+  name: '',
+})
+
+const { data: stats } = await fetchAspirationStats()
+
+const user = computed(() => auth.user)
+
+const handleOpenEditProfile = () => {
+  profileForm.value = {
+    name: user.value?.profile?.name || user.value?.name || '',
+  }
+  isEditProfileModalOpen.value = true
+}
+
+const handleSaveProfile = async () => {
+  try {
+    const payload = {
+      profile: {
+        name: profileForm.value.name
+      }
+    }
+
+    await auth.updateProfile(payload)
+    
+    isEditProfileModalOpen.value = false
+  } catch (error) {
+    console.error('Gagal memperbarui profil:', error)
+  }
+}
+
+const handleConfirmLogout = async () => {
+  await auth.logout()
+  isLogoutModalOpen.value = false 
+}
+
+onMounted(async () => {
+  if (!auth.user?.profile) {
+    try {
+      await auth.fetchProfile()
+    } catch (err) {
+      console.error("Gagal mengambil data profil:", err)
+    }
+  }
+})
+</script>
+
+<template>
+  <div class="">
+    <div class="lg:col-span-6 relative mt-16">
+      <div class="absolute -top-16 left-8 w-32 h-32 bg-[#D9D9D9] rounded-full border-[6px] border-white z-10 overflow-hidden flex items-center justify-center">
+          <img v-if="auth?.user?.image" :src="auth.user.image" alt="Profile" class="w-full h-full object-cover" />
+          <UIcon v-else name="i-lucide-user" class="w-12 h-12 text-gray-400" />
+      </div>
+      <div class="bg-white rounded-4xl pt-20 pb-10 px-8">
+        <h2 class="text-2xl font-bold">{{ auth?.user?.name || 'Nama Lengkap' }}</h2>
+        <a :href="`mailto:${user?.email}`" class="text-sm text-gray-600 underline mt-1 block hover:text-blue-600 transition-colors">
+          {{ user?.email || 'email@contoh.com' }}
+        </a>
+        <button class="w-full mt-6 py-2.5 border-2 rounded-full text-sm font-semibold hover:bg-black hover:text-white duration-400 transition-all cursor-pointer" @click="handleOpenEditProfile">
+          Edit Profil
+        </button>
+        <svg class="w-full text-gray-200 my-8" height="2" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="1" x2="100%" y2="1" stroke="currentColor" stroke-width="2" stroke-dasharray="12 12" />
+        </svg>
+        <div class="grid grid-cols-3 gap-2 text-center">
+          <div>
+            <p class="text-6xl font-bold">{{ stats?.data.selesai || 0 }}</p>
+            <p class="text-sm font-bold text-gray-900 mt-1 leading-tight">Aspirasi yang<br>disampaikan</p>
+          </div>
+          <div>
+            <p class="text-6xl font-black text-gray-900">{{ stats?.data.proses || 0 }}</p>
+            <p class="text-sm font-bold text-gray-900 mt-1 leading-tight">Sudah<br>terlaksanakan</p>
+          </div>
+          <div>
+            <p class="text-6xl font-black text-gray-900">{{ stats?.data.menunggu || 0 }}</p>
+            <p class="text-sm font-bold text-gray-900 mt-1 leading-tight">Masih dalam<br>proses</p>
+          </div>
+        </div>
+      </div>
+      <div class="px-8 mt-6 space-y-3">
+        <p class="block underline text-sm cursor-pointer text-gray-500 hover:text-black" @click="showTosModal = true">Terms of Service</p>
+        <p  class="block underline text-sm cursor-pointer text-gray-500 hover:text-black" @click="showPrivacyPolicyModal = true">Privacy Policy</p>
+        <button @click="isLogoutModalOpen = true" class="block text-sm cursor-pointer text-red-400 underline hover:text-red-600 w-max">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <UiModalDefault 
+    v-model="isEditProfileModalOpen" 
+    title="Edit Profil" 
+    maxWidth="max-w-xl"
+  >
+    <div class="space-y-5">
+      <UiInput 
+        v-model="profileForm.name" 
+        label="Nama Lengkap" 
+        placeholder="Masukkan nama lengkap" 
+        variant="gray" 
+      />
+    </div>
+
+    <template #footer>
+      <div class="flex items-center justify-end gap-3 w-full">
+        <UiButton 
+          label="Simpan Perubahan" 
+          variant="imperative" 
+          color="black" 
+          @click="handleSaveProfile"
+          :loading="auth.loading"
+        />
+      </div>
+    </template>
+  </UiModalDefault>
+
+  <UiModalDefault v-model="showTosModal" :title="TOS_DATA.title" maxWidth="max-w-3xl">
+    <UiModalDataToS />
+  </UiModalDefault>
+
+  <UiModalDefault v-model="showPrivacyPolicyModal" :title="PRIVACY_POLICY.title" maxWidth="max-w-3xl">
+    <UiModalDataPrivacyPolicy />
+  </UiModalDefault>
+
+  <UiModalDefault 
+    v-model="isLogoutModalOpen" 
+    title="Apakah Anda yakin untuk logout?" 
+    maxWidth="max-w-md"
+  >
+    <div class="space-y-4">
+      <p class="text-gray-600">
+        Kamu harus login kembali untuk mengakses data-data aspirasimu 
+      </p>
+    </div>
+
+    <template #footer>
+      <div class="flex items-center justify-end gap-3 w-full">
+        <UiButton 
+          label="Logout" 
+          variant="imperative" 
+          color="red" 
+          @click="handleConfirmLogout" 
+        />
+      </div>
+    </template>
+  </UiModalDefault>
+</template>

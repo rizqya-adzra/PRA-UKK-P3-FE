@@ -4,14 +4,26 @@ import { onBeforeRouteLeave } from 'vue-router'
 import { useAuthStore } from '~/stores/useAuthStore'
 import { useAspiration } from '~/composables/api/useAspiration' 
 import defaultProfileImage from '~/assets/images/core_profile.jpg'
+import { useFormUtils } from '~/composables/useFormUtils'
 
 definePageMeta({
   middleware: 'auth',
   layout: 'default'
 })
 
+const { 
+  alertModal, showAlert, 
+  selectedFiles, handleFileAdded, removeFile, clearFiles,
+  leaveModal, setupLeaveGuard, confirmLeave 
+} = useFormUtils()
+
 const auth = useAuthStore()
 const { createAspiration } = useAspiration()
+
+const agreeTos = ref(false)
+const agreeResponsibility = ref(false)
+const isSubmitting = ref(false)
+const showTosModal = ref(false)
 
 const form = ref({
   title: '',
@@ -20,23 +32,15 @@ const form = ref({
   category_id: '' 
 })
 
-const selectedFiles = ref<{ file: File; preview: string }[]>([])
-
-const agreeTos = ref(false)
-const agreeResponsibility = ref(false)
-const isSubmitting = ref(false)
-const showTosModal = ref(false)
-
-const alertModal = ref({
-  isOpen: false,
-  title: '',
-  message: '',
-  isSuccess: false
+const isFormDirty = computed(() => {
+  return form.value.title !== '' || form.value.location !== '' || 
+         form.value.description !== '' || form.value.category_id !== '' || 
+         selectedFiles.value.length > 0
 })
 
-const showAlert = (title: string, message: string, isSuccess = false) => {
-  alertModal.value = { isOpen: true, title, message, isSuccess }
-}
+setupLeaveGuard(isFormDirty, isSubmitting)
+
+clearFiles()
 
 const handleCloseAlert = () => {
   alertModal.value.isOpen = false
@@ -44,39 +48,6 @@ const handleCloseAlert = () => {
     navigateTo('/user/aspiration/list-page')
   }
 }
-
-const leaveModal = ref(false)
-let leaveNext: Function | null = null
-
-const isFormDirty = computed(() => {
-  return form.value.title !== '' ||
-         form.value.location !== '' ||
-         form.value.description !== '' ||
-         form.value.category_id !== '' ||
-         selectedFiles.value.length > 0
-})
-
-onBeforeRouteLeave((to, from, next) => {
-  if (!isFormDirty.value || isSubmitting.value || alertModal.value.isSuccess) {
-    next()
-    return
-  }
-  
-  leaveModal.value = true
-  leaveNext = next
-})
-
-const confirmLeave = () => {
-  leaveModal.value = false
-  if (leaveNext) leaveNext() 
-}
-
-watch(leaveModal, (isOpen) => {
-  if (!isOpen && leaveNext) {
-    leaveNext(false)
-    leaveNext = null
-  }
-})
 
 onMounted(async () => {
   if (!auth.user?.profile) {
@@ -87,28 +58,6 @@ onMounted(async () => {
     }
   }
 })
-
-const handleFileAdded = (file: File) => {
-  if (selectedFiles.value.length >= 5) {
-    showAlert("Batas File", "Maksimal hanya 5 file yang diizinkan!")
-    return
-  }
-
-  const isImage = file.type.startsWith('image/')
-  const preview = isImage ? URL.createObjectURL(file) : ''
-
-  selectedFiles.value.push({ file, preview })
-}
-
-const removeFile = (index: number) => {
-  const fileItem = selectedFiles.value[index]
-  
-  if (fileItem?.preview) {
-    URL.revokeObjectURL(fileItem.preview)
-  }
-  
-  selectedFiles.value.splice(index, 1)
-}
 
 const handleSubmit = async () => {
   if (!form.value.title || !form.value.location || !form.value.description || !form.value.category_id) {

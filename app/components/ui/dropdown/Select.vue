@@ -1,24 +1,78 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useAuthStore } from '~/stores/useAuthStore'
 
-const students = [
-  { id: 1, name: 'Rizqya Adzra Zahira Sudrajat', nis: '12310021', class: 'PPLG XII-5' },
-  { id: 2, name: 'Shapira Bunga Aulia', nis: '12310047', class: 'PPLG XII-5' },
-  { id: 3, name: 'Shayma Choula Febryna', nis: '12310048', class: 'PPLG XII-5' }
-]
+const props = defineProps<{
+  modelValue?: string | number | null
+}>()
 
-const selectedStudent = ref<typeof students[0] | undefined>(undefined)
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string | null): void
+}>()
 
+const authStore = useAuthStore()
+const rawUsers = ref<any[]>([]) 
+const isLoading = ref(false)
 const searchQuery = ref('')
 
-const filteredStudents = computed(() => {
-  if (!searchQuery.value) return students
-  
-  return students.filter(student => {
-    return student.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-           student.nis.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-           student.class.toLowerCase().includes(searchQuery.value.toLowerCase())
+const loadUsers = async () => {
+  isLoading.value = true
+  try {
+    const response = await authStore.fetchAllUsers()
+    
+    if (response && response.data) {
+      rawUsers.value = response.data 
+    }
+  } catch (error) {
+    console.error("Gagal memuat list user:", error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+onMounted(() => {
+  loadUsers()
+})
+
+const students = computed(() => {
+  return rawUsers.value.map(user => {
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.profile?.name || 'User Tanpa Nama',
+      nis: user.profile?.nis || '-',
+      rombel: user.profile?.rombel || '-'
+    }
   })
+})
+
+const filteredStudents = computed(() => {
+  let result = students.value
+
+  if (searchQuery.value) {
+    const searchLower = searchQuery.value.toLowerCase()
+    result = result.filter(student => {
+      return student.name.toLowerCase().includes(searchLower) ||
+             student.nis.toString().toLowerCase().includes(searchLower) ||
+             student.rombel.toLowerCase().includes(searchLower) 
+    })
+  }
+
+  return result.slice(0, 5)
+})
+
+const selectedStudent = computed({
+  get() {
+    if (!props.modelValue) return undefined
+    return students.value.find(s => s.id?.toString() === props.modelValue?.toString())
+  },
+  set(newStudent) {
+    if (newStudent) {
+      emit('update:modelValue', newStudent.id.toString())
+    } else {
+      emit('update:modelValue', '')
+    }
+  }
 })
 </script>
 
@@ -50,11 +104,11 @@ const filteredStudents = computed(() => {
           <UIcon 
             v-if="selectedStudent"
             name="i-lucide-x" 
-            class="size-5 text-gray-400 hover:text-red-500 transition-colors cursor-pointer" 
+            class="size-5 text-gray-400 hover:text-red-500 transition-colors cursor-pointer z-10" 
             @click.prevent.stop="selectedStudent = undefined"
           />
           <UIcon 
-            v-if="!selectedStudent"
+            v-else
             name="i-lucide-chevron-down" 
             :class="['size-5 text-black transition-transform duration-200', open ? 'rotate-180' : '']" 
           />
@@ -82,7 +136,7 @@ const filteredStudents = computed(() => {
               {{ item.name }}
             </span>
             <span class="text-xs text-gray-500 mt-1 font-medium">
-              {{ item.nis }} • {{ item.class }}
+              {{ item.nis }} • {{ item.rombel }}
             </span>
           </div>
         </div>

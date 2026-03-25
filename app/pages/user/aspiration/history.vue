@@ -15,7 +15,6 @@ const { fetchAspirationHistories, exportAspirationHistoriesExcel } = useAspirati
 const {
   searchParams,
   categoryParams,
-  statusParams,
   startDateParams,
   endDateParams,
   pageParams,
@@ -130,7 +129,7 @@ const executeExport = async () => {
 
     <div v-else-if="listAspirasi.length === 0" class="bg-white rounded-4xl w-full px-12 py-24 flex justify-center items-center">
       <p class="text-center text-gray-500">
-        {{ searchParams || categoryParams || statusParams ? 'Tidak ada aspirasi yang cocok.' : 'Masih kosong nih yuk bikin dulu!' }}
+        {{ searchParams || categoryParams ? 'Tidak ada aspirasi yang cocok.' : 'Masih kosong nih yuk bikin dulu!' }}
       </p>
     </div>
 
