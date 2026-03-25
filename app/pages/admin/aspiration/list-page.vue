@@ -76,7 +76,7 @@ const executeExport = async () => {
 </script>
 
 <template>
-  <div class="px-10">  
+  <div class="px-28">  
     <div class="flex flex-col items-center justify-center gap-7">
       <p class="text-3xl font-bold text-center">Semua List Aspirasi</p>
       <div class="space-y-1 w-full max-w-2xl">
@@ -138,7 +138,7 @@ const executeExport = async () => {
         </p>
       </div>
   
-      <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div v-else class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
         <UiCard 
           v-for="item in listAspirasi" 
           :key="item.id" 

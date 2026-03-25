@@ -167,13 +167,19 @@ export const useAuthStore = defineStore('auth', {
       this.validationErrors = {}
       const apiFetch = useApi()
 
+      const headers: Record<string, string> = {
+        Authorization: `Token ${this.token}`,
+        Accept: 'application/json',
+      }
+
+      if (!(formData instanceof FormData)) {
+        headers['Content-Type'] = 'application/json'
+      }
+
       try {
         const response = await apiFetch<ApiResponse>('profile/', {
           method: 'PUT',
-          headers: {
-            Authorization: `Token ${this.token}`,
-            Accept: 'application/json',
-          },
+          headers,
           body: formData
         })
 

@@ -8,7 +8,7 @@ definePageMeta({
   layout: 'admin'
 })
 
-const { fetchNotification, markAllAsRead } = useNotification()
+const { fetchNotification, markAsRead, markAllAsRead } = useNotification()
 const { data: response, pending } = await fetchNotification()
 const notifications = computed(() => response.value?.data || [])
 
@@ -52,10 +52,23 @@ const handleMarkAll = async () => {
     console.error("Gagal menandai semua notifikasi:", error)
   }
 }
+
+const goToAspirationDetail = async (notif: any) => {
+  if (notif.aspiration_id) {
+    try {
+      await markAsRead(notif.id)
+      notif.is_read = true
+    } catch (error) {
+      console.error("Gagal menandai notifikasi sebagai sudah dibaca:", error)
+    }
+    
+    navigateTo(`/admin/aspiration/detail/${notif.aspiration_id}`)
+  }
+}
 </script>
 
 <template>
-  <div class="px-10">
+  <div class="px-28">
     <div class="flex items-end justify-between mb-7 px-10">
       <p class="text-3xl font-bold">Notifikasi</p>
       <p class="text-sm text-blue-500 cursor-pointer hover:underline font-medium" @click="handleMarkAll">
@@ -77,6 +90,7 @@ const handleMarkAll = async () => {
         :key="notif.id"
         class="bg-white rounded-4xl p-8 focus:ring focus:ring-blue-500 hover:ring-2 hover:ring-blue-500 duration-400 cursor-pointer transition-all"
         :class="{ 'opacity-70': notif.is_read, 'ring ring-blue-500': !notif.is_read }"
+        @click="goToAspirationDetail(notif)"
       >
         <div class="flex items-start md:items-center justify-between gap-4 flex-col md:flex-row">
           <p class="text-xl font-bold leading-tight flex-1">

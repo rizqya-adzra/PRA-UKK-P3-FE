@@ -11,7 +11,7 @@ const props = withDefaults(defineProps<{
 const classes = computed(() => [
   'p-2 rounded-[10px] flex items-center justify-center',
   'transition-all duration-200 relative cursor-pointer', 
-  props.isActive ? 'bg-[#DFE3F0] text-black' : 'bg-transparent text-black hover:bg-gray-100'
+  props.isActive ? 'bg-[#F6F6F6] text-electric-blue' : 'bg-transparent text-black hover:bg-gray-100'
 ])
 </script>
 

@@ -16,6 +16,8 @@ const { fetchAspirationStats } = useAspiration()
 const isEditProfileModalOpen = ref(false)
 const profileForm = ref({
   name: '',
+  image: null as File | null,
+  imagePreview: ''
 })
 
 const { data: stats } = await fetchAspirationStats()
@@ -25,20 +27,50 @@ const user = computed(() => auth.user)
 const handleOpenEditProfile = () => {
   profileForm.value = {
     name: user.value?.profile?.name || user.value?.name || '',
+    image: null,
+    imagePreview: ''
   }
   isEditProfileModalOpen.value = true
 }
 
+const handleImageSelect = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0]
+  
+  if (file) {
+    profileForm.value.image = file
+    profileForm.value.imagePreview = URL.createObjectURL(file)
+  }
+}
+
+const removeImage = () => {
+  if (profileForm.value.imagePreview) {
+    URL.revokeObjectURL(profileForm.value.imagePreview)
+  }
+  profileForm.value.image = null
+  profileForm.value.imagePreview = ''
+}
+
 const handleSaveProfile = async () => {
   try {
-    const payload = {
-      profile: {
+    let payload: FormData | Record<string, any>
+
+    if (profileForm.value.image) {
+      payload = new FormData()
+      payload.append('name', profileForm.value.name)
+      payload.append('image', profileForm.value.image)
+    } else {
+      payload = {
         name: profileForm.value.name
       }
     }
 
     await auth.updateProfile(payload)
-    
+
+    if (profileForm.value.imagePreview) {
+      URL.revokeObjectURL(profileForm.value.imagePreview)
+    }
+
     isEditProfileModalOpen.value = false
   } catch (error) {
     console.error('Gagal memperbarui profil:', error)
@@ -59,6 +91,14 @@ onMounted(async () => {
     }
   }
 })
+
+watch(isEditProfileModalOpen, (isOpen) => {
+  if (!isOpen && profileForm.value.imagePreview) {
+    URL.revokeObjectURL(profileForm.value.imagePreview)
+    profileForm.value.imagePreview = ''
+    profileForm.value.image = null
+  }
+})
 </script>
 
 <template>
@@ -70,7 +110,7 @@ onMounted(async () => {
       </div>
       <div class="bg-white rounded-4xl pt-20 pb-10 px-8">
         <h2 class="text-2xl font-bold">{{ auth?.user?.name || 'Nama Lengkap' }}</h2>
-        <a :href="`mailto:${user?.email}`" class="text-sm text-gray-600 underline mt-1 block hover:text-blue-600 transition-colors">
+        <a :href="user?.email ? `mailto:${user.email}` : undefined" class="text-sm text-gray-600 underline mt-1 block hover:text-blue-600 transition-colors">
           {{ user?.email || 'email@contoh.com' }}
         </a>
         <button class="w-full mt-6 py-2.5 border-2 rounded-full text-sm font-semibold hover:bg-black hover:text-white duration-400 transition-all cursor-pointer" @click="handleOpenEditProfile">
@@ -107,6 +147,45 @@ onMounted(async () => {
     title="Edit Profil" 
     maxWidth="max-w-xl"
   >
+    <div class="space-y-3 mb-7">        
+      <div class="flex items-center gap-4">
+        <div class="w-20 h-20 bg-gray-100 rounded-full border-2 border-gray-200 flex items-center justify-center overflow-hidden">
+          <img 
+            v-if="profileForm.imagePreview || auth?.user?.image" 
+            :src="profileForm.imagePreview || auth?.user?.image || undefined" 
+            alt="Profile Preview" 
+            class="w-full h-full object-cover"
+          />
+          <UIcon v-else name="i-lucide-user" class="w-8 h-8 text-gray-400" />
+        </div>
+        
+        <button 
+          v-if="profileForm.imagePreview"
+          @click="removeImage"
+          class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors"
+        >
+          <UIcon name="i-lucide-x" class="w-3 h-3" />
+        </button>
+        
+        <div class="flex-1">
+          <input
+            type="file"
+            accept="image/*"
+            @change="handleImageSelect"
+            class="hidden"
+            id="profile-image-input"
+          />
+          <label 
+            for="profile-image-input"
+            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 cursor-pointer"
+          >
+            <UIcon name="i-lucide-camera" class="w-4 h-4 mr-2" />
+            Pilih Gambar
+          </label>
+          <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG, Max: 5MB</p>
+        </div>
+      </div>
+    </div>
     <div class="space-y-5">
       <UiInput 
         v-model="profileForm.name" 

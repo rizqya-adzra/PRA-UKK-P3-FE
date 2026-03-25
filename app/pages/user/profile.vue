@@ -18,7 +18,9 @@ const profileForm = ref({
   name: '',
   nis: '',
   rombel: '',
-  rayon: ''
+  rayon: '',
+  image: null as File | null,
+  imagePreview: ''
 })
 
 const { data: statsResponse } = await fetchAspirationStats()
@@ -36,24 +38,59 @@ const handleOpenEditProfile = () => {
     name: user.value?.profile?.name || user.value?.name || '',
     nis: user.value?.profile?.nis || user.value?.nis || '',
     rombel: user.value?.profile?.rombel || user.value?.rombel || '',
-    rayon: user.value?.profile?.rayon || user.value?.rayon || ''
+    rayon: user.value?.profile?.rayon || user.value?.rayon || '',
+    image: null,
+    imagePreview: ''
   }
   isEditProfileModalOpen.value = true
 }
 
+const handleImageSelect = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0]
+
+  if (file) {
+    profileForm.value.image = file
+    profileForm.value.imagePreview = URL.createObjectURL(file)
+  }
+}
+
+const removeImage = () => {
+  if (profileForm.value.imagePreview) {
+    URL.revokeObjectURL(profileForm.value.imagePreview)
+  }
+  profileForm.value.image = null
+  profileForm.value.imagePreview = ''
+}
+
 const handleSaveProfile = async () => {
   try {
-    const payload = {
-      profile: {
-        name: profileForm.value.name,
-        nis: Number(profileForm.value.nis),
-        rombel: profileForm.value.rombel,
-        rayon: profileForm.value.rayon
+    let payload: FormData | Record<string, any>
+
+    if (profileForm.value.image) {
+      payload = new FormData()
+      payload.append('profile[name]', profileForm.value.name)
+      payload.append('profile[nis]', String(profileForm.value.nis || ''))
+      payload.append('profile[rombel]', profileForm.value.rombel)
+      payload.append('profile[rayon]', profileForm.value.rayon)
+      payload.append('image', profileForm.value.image)
+    } else {
+      payload = {
+        profile: {
+          name: profileForm.value.name,
+          nis: Number(profileForm.value.nis),
+          rombel: profileForm.value.rombel,
+          rayon: profileForm.value.rayon
+        }
       }
     }
 
     await auth.updateProfile(payload)
-    
+
+    if (profileForm.value.imagePreview) {
+      URL.revokeObjectURL(profileForm.value.imagePreview)
+    }
+
     isEditProfileModalOpen.value = false
   } catch (error) {
     console.error('Gagal memperbarui profil:', error)
@@ -72,6 +109,14 @@ onMounted(async () => {
     } catch (err) {
       console.error("Gagal mengambil data profil:", err)
     }
+  }
+})
+
+watch(isEditProfileModalOpen, (isOpen) => {
+  if (!isOpen && profileForm.value.imagePreview) {
+    URL.revokeObjectURL(profileForm.value.imagePreview)
+    profileForm.value.imagePreview = ''
+    profileForm.value.image = null
   }
 })
 </script>
@@ -155,6 +200,46 @@ onMounted(async () => {
     title="Edit Profil" 
     maxWidth="max-w-xl"
   >
+    <div class="space-y-3 mb-7">        
+      <div class="flex items-center gap-4">
+        <div class="w-20 h-20 bg-gray-100 rounded-full border-2 border-gray-200 flex items-center justify-center overflow-hidden">
+          <img 
+            v-if="profileForm.imagePreview || auth?.user?.image" 
+            :src="profileForm.imagePreview || auth?.user?.image || undefined" 
+            alt="Profile Preview" 
+            class="w-full h-full object-cover"
+          />
+          <UIcon v-else name="i-lucide-user" class="w-8 h-8 text-gray-400" />
+        </div>
+
+        <button 
+          v-if="profileForm.imagePreview"
+          @click="removeImage"
+          class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors"
+        >
+          <UIcon name="i-lucide-x" class="w-3 h-3" />
+        </button>
+
+        <div class="flex-1">
+          <input
+            type="file"
+            accept="image/*"
+            @change="handleImageSelect"
+            class="hidden"
+            id="profile-image-input"
+          />
+          <label 
+            for="profile-image-input"
+            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 cursor-pointer"
+          >
+            <UIcon name="i-lucide-camera" class="w-4 h-4 mr-2" />
+            Pilih Gambar
+          </label>
+          <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG, Max: 5MB</p>
+        </div>
+      </div>
+    </div>
+
     <div class="space-y-5">
       <UiInput 
         v-model="profileForm.name" 

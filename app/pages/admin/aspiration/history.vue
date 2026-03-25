@@ -75,7 +75,7 @@ const executeExport = async () => {
 </script>
 
 <template>
-  <div class="px-10">  
+  <div class="px-28">  
     <div class="w-165 flex items-center gap-10 mx-auto bg-yellow-50 border border-amber-300 rounded-4xl px-14 py-6 mb-10">
       <UIcon name="i-lucide-lightbulb" class="size-7 bg-amber-600" />
       <p class="text-amber-600">Hanya menampilkan Aspirasi yang sudah selesai dan dibatalkan</p>
@@ -140,7 +140,7 @@ const executeExport = async () => {
         </p>
       </div>
   
-      <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div v-else class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
         <UiCard 
           v-for="item in listAspirasi" 
           :key="item.id" 

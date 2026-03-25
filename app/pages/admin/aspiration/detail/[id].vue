@@ -28,8 +28,14 @@ const isSubmitting = ref(false)
 const isConfirmModalOpen = ref(false)
 const form = ref({
   description: '',
-  status: '' 
+  status: '' ,
 })
+
+watch(aspiration, (newAspiration) => {
+  if (newAspiration?.status && form.value.status === '') {
+    form.value.status = newAspiration.status
+  }
+}, { immediate: true })
 
 const isFormDirty = computed(() => {
   return form.value.description !== '' || form.value.status !== '' || selectedFiles.value.length > 0
@@ -44,6 +50,11 @@ const timelineStatus = computed(() => {
   const stat = aspiration.value.status.toLowerCase()
   if (stat === 'proses') return 'diproses'
   return stat as 'menunggu' | 'diproses' | 'selesai' | 'dibatalkan'
+})
+
+const progressUpdates = computed(() => {
+  if (!aspiration.value?.progress_updates) return []
+  return [...aspiration.value.progress_updates].reverse()
 })
 
 const executeExportPDF = () => {
@@ -117,7 +128,7 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <div class="px-10">
+  <div class="px-48">
     <div v-if="pending" class="flex justify-center items-center py-20 min-h-[50vh]">
       <UIcon name="i-lucide-loader-2" class="size-10 text-blue-500 animate-spin" />
     </div>
@@ -196,7 +207,7 @@ const handleSubmit = async () => {
           </div>
   
           <div 
-            v-for="(update, index) in aspiration.progress_updates" 
+            v-for="(update, index) in progressUpdates" 
             :key="update.id"
             class="bg-[#F1F9FF] rounded-3xl md:rounded-4xl py-8 md:py-10 px-6 md:px-10 w-full mt-8"
           >

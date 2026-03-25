@@ -74,3 +74,7 @@
 - added [id].vue in ./pages/admin/aspiration/detail/
 - added useFormUtils.ts, useFormatter.ts, useExportPDF.ts in ./composables/
 - modified SidebarAdmin.vue
+
+### V1.0.12
+- modified profile in both admin and user prefix to have image update
+- modifed notification in both admin and user prefix to have mark as read and click to detail
