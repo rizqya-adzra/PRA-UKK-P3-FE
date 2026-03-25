@@ -23,6 +23,13 @@ const profileForm = ref({
   imagePreview: ''
 })
 
+const isChangePasswordModalOpen = ref(false)
+const passwordForm = ref({
+  oldPassword: '',
+  newPassword: '',
+  confirmPassword: ''
+})
+
 const { data: statsResponse } = await fetchAspirationStats()
 const { data: Response } = await fetchAspirations()
 
@@ -97,6 +104,20 @@ const handleSaveProfile = async () => {
   }
 }
 
+const handleSavePassword = async () => {
+  if (passwordForm.value.newPassword !== passwordForm.value.confirmPassword) {
+    alert("Password baru dan konfirmasi tidak cocok!")
+    return
+  }
+  
+  try {
+    passwordForm.value = { oldPassword: '', newPassword: '', confirmPassword: '' }
+    isChangePasswordModalOpen.value = false
+  } catch (error) {
+    console.error('Gagal mengubah password:', error)
+  }
+}
+
 const handleConfirmLogout = async () => {
   await auth.logout()
   isLogoutModalOpen.value = false 
@@ -140,10 +161,15 @@ watch(isEditProfileModalOpen, (isOpen) => {
             {{ user?.email || 'email@contoh.com' }}
           </a>
           
-          <button class="w-full mt-6 py-2.5 border-2 rounded-full text-sm font-semibold hover:bg-black hover:text-white duration-400 transition-all cursor-pointer" @click="handleOpenEditProfile">
-            Edit Profil
-          </button>
-          
+          <div class="flex flex-col items-center gap-3 mt-8 w-full max-w-sm mx-auto">
+            <button class="w-full py-2 border-2 border-gray-400 rounded-full text-sm font-bold text-gray-600 hover:bg-gray-100 transition-all cursor-pointer" @click="handleOpenEditProfile">
+              Edit Profil
+            </button>
+            <button class="w-full py-2 border-2 border-gray-400 rounded-full text-sm font-bold text-gray-600 hover:bg-gray-100 transition-all cursor-pointer" @click="isChangePasswordModalOpen = true">
+              Change Password
+            </button>
+          </div>
+              
           <svg class="w-full text-gray-200 my-8" height="2" xmlns="http://www.w3.org/2000/svg">
             <line x1="0" y1="1" x2="100%" y2="1" stroke="currentColor" stroke-width="2" stroke-dasharray="12 12" />
           </svg>
@@ -274,6 +300,43 @@ watch(isEditProfileModalOpen, (isOpen) => {
           variant="imperative" 
           color="black" 
           @click="handleSaveProfile"
+          :loading="auth.loading"
+        />
+      </div>
+    </template>
+  </UiModalDefault>
+
+  <UiModalDefault v-model="isChangePasswordModalOpen" title="Change Password" maxWidth="max-w-md">
+    <div class="space-y-5">
+      <UiInput 
+        v-model="passwordForm.oldPassword" 
+        label="Password Lama" 
+        type="password"
+        placeholder="Masukkan password lama" 
+        variant="gray" 
+      />
+      <UiInput 
+        v-model="passwordForm.newPassword" 
+        label="Password Baru" 
+        type="password"
+        placeholder="Masukkan password baru" 
+        variant="gray" 
+      />
+      <UiInput 
+        v-model="passwordForm.confirmPassword" 
+        label="Konfirmasi Password Baru" 
+        type="password"
+        placeholder="Ketik ulang password baru" 
+        variant="gray" 
+      />
+    </div>
+    <template #footer>
+      <div class="flex items-center justify-end gap-3 w-full">
+        <UiButton 
+          label="Simpan Password" 
+          variant="imperative" 
+          color="black" 
+          @click="handleSavePassword"
           :loading="auth.loading"
         />
       </div>

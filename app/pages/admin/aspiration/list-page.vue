@@ -76,58 +76,29 @@ const executeExport = async () => {
 </script>
 
 <template>
-  <div class="px-28">  
-    <div class="flex flex-col items-center justify-center gap-7">
-      <p class="text-3xl font-bold text-center">Semua List Aspirasi</p>
-      <div class="space-y-1 w-full max-w-2xl">
-        <UiInput 
-          v-model="searchParams" 
-          placeholder="Cari aspirasi..." 
-          variant="search" 
-          icon="i-lucide-search"
-        />
-        <div class="flex items-center justify-center gap-2">
-          <UiDropdownDate 
-            v-model:startDate="startDateParams" 
-            v-model:endDate="endDateParams" 
-          />    
-          <UiDropdownCategory v-model="categoryParams" />
-          <UiDropdownStatus v-model="statusParams" />    
-          <UiDropdownSelect v-model="selectParams" />    
-        </div>
+  <div>  
+    <div class="w-1/2">
+      <UiInput 
+        v-model="searchParams" 
+        placeholder="Cari laporan aspirasi..." 
+        variant="search" 
+        icon="i-lucide-search-check"
+      />
+    </div>
+    <div class="flex items-center justify-between mt-8">
+      <p class="text-4xl font-bold text-center ml-2">Semua Daftar Aspirasi</p>
+      <div class="flex items-center justify-center gap-2">
+        <UiDropdownDate 
+          v-model:startDate="startDateParams" 
+          v-model:endDate="endDateParams" 
+        />    
+        <UiDropdownCategory v-model="categoryParams" />
+        <UiDropdownStatus v-model="statusParams" />    
+        <UiDropdownSelect v-model="selectParams" />    
       </div>
     </div>
   
-    <div class="w-full my-12">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-4 mb-4">
-          <button 
-            @click="prevPage" 
-            :disabled="pageParams === 1"
-            class="w-6 h-6 flex items-center justify-center rounded-full border-2 border-black disabled:opacity-20 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors cursor-pointer"
-          >
-            <UIcon name="i-lucide-chevron-left" class="size-6 text-black" />
-          </button>
-  
-          <span class="select-none">
-            page {{ pageParams }} / {{ totalPages }}
-          </span>
-  
-          <button 
-            @click="nextPage" 
-            :disabled="pageParams >= totalPages"
-            class="w-6 h-6 flex items-center justify-center rounded-full border-2 border-black disabled:opacity-20 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors cursor-pointer"
-          >
-            <UIcon name="i-lucide-chevron-right" class="size-6 text-black" />
-          </button>
-        </div>
-        
-        <div class="flex items-center justify-end gap-2 mb-4">
-          <UiDropdownPagination v-model="limitParams" />
-          <UiButton label="Export to Excel" variant="export" color="green" @click="isExportModalOpen = true" />
-        </div>
-      </div>
-  
+    <div class="w-full my-6">  
       <div v-if="pending" class="w-full flex justify-center py-24">
         <p class="text-gray-500 animate-pulse font-medium">Sedang memuat data...</p>
       </div>
@@ -138,7 +109,7 @@ const executeExport = async () => {
         </p>
       </div>
   
-      <div v-else class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
+      <div v-else class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
         <UiCard 
           v-for="item in listAspirasi" 
           :key="item.id" 
@@ -146,6 +117,34 @@ const executeExport = async () => {
           @click="goToDetail(item.id)" 
           class="cursor-pointer"
         />
+      </div>
+    </div>
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-4 mb-4">
+        <button 
+          @click="prevPage" 
+          :disabled="pageParams === 1"
+          class="w-6 h-6 flex items-center justify-center rounded-full disabled:opacity-20 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors cursor-pointer"
+        >
+          <UIcon name="i-lucide-chevron-left" class="size-6 text-tertiary" />
+        </button>
+
+        <span class="select-none text-tertiary font-semibold">
+          {{ pageParams }} / {{ totalPages }}
+        </span>
+
+        <button 
+          @click="nextPage" 
+          :disabled="pageParams >= totalPages"
+          class="w-6 h-6 flex items-center justify-center rounded-full disabled:opacity-20 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors cursor-pointer"
+        >
+          <UIcon name="i-lucide-chevron-right" class="size-6 text-tertiary" />
+        </button>
+      </div>
+      
+      <div class="flex items-center justify-end gap-2 mb-4">
+        <UiDropdownPagination v-model="limitParams" />
+        <UiButton label="Export to Excel" variant="export" color="green" @click="isExportModalOpen = true" />
       </div>
     </div>
   </div>

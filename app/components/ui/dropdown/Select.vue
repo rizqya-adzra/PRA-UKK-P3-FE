@@ -93,7 +93,7 @@ const selectedStudent = computed({
         <button 
           type="button"
           :class="[
-            'w-36 space-x-2 h-13 px-6 rounded-full flex items-center justify-between font-medium text-black outline-none transition-all duration-300 cursor-pointer border-2',
+            'w-36 space-x-2 h-13 px-6 rounded-full flex items-center justify-between font-bold text-tertiary outline-none transition-all duration-300 cursor-pointer border-2',
             selectedStudent ? 'border-blue-500' : 'border-transparent',
             open ? 'bg-[#E9ECF6]' : 'bg-white hover:bg-[#E9ECF6] focus:bg-[#E9ECF6]'
           ]"
@@ -110,7 +110,7 @@ const selectedStudent = computed({
           <UIcon 
             v-else
             name="i-lucide-chevron-down" 
-            :class="['size-5 text-black transition-transform duration-200', open ? 'rotate-180' : '']" 
+            :class="['size-5 text-tertiary transition-transform duration-200', open ? 'rotate-180' : '']" 
           />
         </button>
       </template>

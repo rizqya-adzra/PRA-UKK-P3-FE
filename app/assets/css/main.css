@@ -3,11 +3,18 @@
 @theme {
     --font-sans: Montserrat, ui-sans-serif, system-ui, sans-serif;
 
-    --color-electric-blue: #1700E5;
+    --color-electric-blue: #2134FF;
     --color-electric-blue-hover: #1200b3;
     --color-electric-blue-subtle: #dbd9f9;
 
     --color-pure-black: #000000;
     --color-pure-black-hover: #0C0C0C;
     --color-pure-black-subtle: #f2f2f2;
+
+    --color-tertiary: #696969;
+
+    --color-yellow: #D7A400;
+    --color-purple: #6D5DFF;
+    --color-green: #19A229;
+    --color-red: #C03648;
 }

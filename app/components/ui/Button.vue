@@ -17,8 +17,8 @@ const props = withDefaults(defineProps<{
 const colorVariants: Record<ButtonColor, string> = {
   blue: 'bg-electric-blue hover:bg-electric-blue-hover',
   black: 'bg-pure-black hover:bg-pure-black-hover',
-  green: 'bg-[#227742] hover:bg-[#21653B]',
-  red: 'bg-[#861D1D] hover:bg-[#711D1D]',
+  green: 'bg-green hover:bg-[#21653B]',
+  red: 'bg-red hover:bg-[#711D1D]',
   gradient: 'bg-gradient-to-r from-electric-blue to-[#7975EB] hover:from-electric-blue-hover to-[#7975EB]'
 }
 

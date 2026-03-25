@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import defaultProfileImage from '~/assets/images/core_profile.jpg'
 import { useAspiration } from '~/composables/api/useAspiration'
+import { useFormatter } from '~/composables/useFormatter'
 
 definePageMeta({
   middleware: 'auth',
@@ -12,27 +13,30 @@ definePageMeta({
 const route = useRoute()
 const { fetchAspirationDetail, exportAspirationPDF } = useAspiration() 
 const aspirationId = route.params.id as string
+const { formatDate } = useFormatter()
 
 const { data: response, pending, error } = await fetchAspirationDetail(aspirationId)
 const aspiration = computed(() => response.value?.data)
 
-const fileModalRef = ref<any>(null)
-
-const formatDate = (isoString: string | undefined) => {
-  if (!isoString) return '-'
-  const date = new Date(isoString)
-  return new Intl.DateTimeFormat('id-ID', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-  }).format(date)
+const statusColors = {
+  menunggu: 'text-yellow-500',
+  proses: 'text-blue-500',
+  selesai: 'text-green-500',
+  dibatalkan: 'text-red-500'
 }
+
+const fileModalRef = ref<any>(null)
 
 const timelineStatus = computed(() => {
   if (!aspiration.value) return 'menunggu'
   const stat = aspiration.value.status.toLowerCase()
   if (stat === 'proses') return 'diproses'
   return stat as 'menunggu' | 'diproses' | 'selesai' | 'dibatalkan'
+})
+
+const progressUpdates = computed(() => {
+  if (!aspiration.value?.progress_updates) return []
+  return [...aspiration.value.progress_updates].reverse()
 })
 
 const statusMessage = computed(() => {
@@ -89,16 +93,15 @@ const executeExportPDF = async () => {
       <UiStatusTimeline :status="timelineStatus" />
     </div>
 
-    <div class="flex flex-col items-center justify-center text-center mt-10 min-w-full">
-      <div class="flex flex-col-reverse md:flex-row justify-between items-center w-full px-4 md:px-12 gap-4">
-        <UiButton label="Export to PDF" variant="export" color="red" @click="isExportModalOpen = true" />
-        <p class="text-sm md:text-base"> 
-          No. Aspirasi: <span class="font-semibold text-blue-500">{{ aspiration.report_id }}</span> 
-        </p>
-      </div>
-
+    <div class="flex flex-col items-center justify-center text-center mt-5 min-w-full">
       <div class="bg-white rounded-4xl py-8 md:py-10 px-6 md:px-12 mt-4 mb-14 space-y-5 w-full">
-        
+        <div class="flex flex-col-reverse md:flex-row justify-between items-center w-full mb-10">
+          <UiButton label="Export to PDF" variant="export" color="red" @click="isExportModalOpen = true" />
+          <p class="text-sm font-semibold text-tertiary"> 
+            No. Aspirasi: <span class="font-semibold text-blue-500">{{ aspiration.report_id }}</span> 
+          </p>
+        </div>
+
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div class="w-full flex items-center gap-3 text-left">
             <img 
@@ -155,13 +158,11 @@ const executeExportPDF = async () => {
         </div>
 
         <div 
-          v-for="(update, index) in aspiration.progress_updates" 
+          v-for="(update, index) in progressUpdates" 
           :key="update.id"
-          class="bg-[#F1F9FF] rounded-3xl md:rounded-4xl py-8 md:py-10 px-6 md:px-10 w-full mt-8"
+          class="bg-gray-100 rounded-3xl md:rounded-4xl py-8 md:py-10 px-6 md:px-10 w-full mt-8"
         >
-          <div class="flex flex-col md:flex-row gap-4 md:gap-7">
-            <div class="hidden md:block border-l-2 border-black/10 min-h-full"></div>
-            
+          <div class="flex flex-col md:flex-row gap-4 md:gap-7">            
             <div class="flex-1 w-full">
               <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
                 <div class="flex items-center gap-3">
@@ -172,7 +173,7 @@ const executeExportPDF = async () => {
                     <span class="font-bold text-black text-[14px] md:text-[15px] leading-tight truncate w-full">
                       Admin ({{ update.admin_name }})
                     </span>
-                    <span class="text-xs text-blue-500 mt-1 font-semibold uppercase">
+                    <span :class="`text-xs mt-1 font-semibold uppercase ${statusColors[update.status.toLowerCase() as keyof typeof statusColors] || 'text-gray-500'}`">
                       {{ update.status }}
                     </span>
                   </div>
@@ -186,7 +187,6 @@ const executeExportPDF = async () => {
               
               <div v-if="update.attachments && update.attachments.length > 0" class="flex flex-wrap gap-4 mt-5">
                 <template v-for="file in update.attachments" :key="file.id">
-                  
                   <img 
                     v-if="file.file_type === 'image'"
                     :src="file.file" 
@@ -203,13 +203,11 @@ const executeExportPDF = async () => {
                     <UIcon name="i-lucide-file-text" class="size-8 text-blue-500 mb-2" />
                     <span class="text-xs font-semibold text-gray-700">Lihat Dokumen</span>
                   </div>
-
                 </template>
               </div>
             </div>
           </div>
         </div>
-
       </div>
 
       <div class="flex flex-col md:flex-row items-center justify-center gap-3 mb-16 text-sm md:text-base">
@@ -217,7 +215,6 @@ const executeExportPDF = async () => {
         <UiLabel :text="aspiration.status_display" variant="outline" />
         <p class="text-gray-500">{{ statusMessage }}</p>
       </div>
-
     </div>
 
     <UiFilePreviewModal ref="fileModalRef" />

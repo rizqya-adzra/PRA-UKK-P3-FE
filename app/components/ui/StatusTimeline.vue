@@ -14,40 +14,40 @@ const steps = [
 const getStepColorClass = (index: number) => {
   if (index === 0) {
     return props.status === 'menunggu' 
-      ? { border: 'border-amber-500', bg: 'bg-amber-500', hoverBg: 'hover:bg-amber-600', iconText: 'text-white', labelText: 'text-amber-500' } // Aktif (Solid)
-      : { border: 'border-amber-500', bg: 'bg-amber-50', hoverBg: 'hover:bg-amber-100', iconText: 'text-amber-500', labelText: 'text-amber-500' } // Sudah lewat (Outline)
+      ? { border: 'border-yellow', bg: 'bg-yellow', hoverBg: 'hover:bg-amber-600', iconText: 'text-white', labelText: 'text-yellow' } // Aktif (Solid)
+      : { border: 'border-yellow', bg: 'bg-amber-50', hoverBg: 'hover:bg-amber-100', iconText: 'text-yellow', labelText: 'text-yellow' } // Sudah lewat (Outline)
   }
   
   if (index === 1) {
     if (props.status === 'diproses') {
-      return { border: 'border-blue-500', bg: 'bg-blue-500', hoverBg: 'hover:bg-blue-600', iconText: 'text-white', labelText: 'text-blue-500' } // Aktif (Solid)
+      return { border: 'border-purple', bg: 'bg-purple', hoverBg: 'hover:bg-blue-600', iconText: 'text-white', labelText: 'text-purple' } // Aktif (Solid)
     } else if (props.status === 'selesai') {
-      return { border: 'border-blue-500', bg: 'bg-blue-50', hoverBg: 'hover:bg-blue-100', iconText: 'text-blue-500', labelText: 'text-blue-500' } // Sudah lewat (Outline)
+      return { border: 'border-purple', bg: 'bg-blue-50', hoverBg: 'hover:bg-blue-100', iconText: 'text-purple', labelText: 'text-purple' } // Sudah lewat (Outline)
     }
-    return { border: 'border-gray-400', bg: 'bg-gray-100', hoverBg: 'hover:bg-gray-200', iconText: 'text-gray-500', labelText: 'text-gray-500' }
+    return { border: 'border-tertiary', bg: 'bg-gray-100', hoverBg: 'hover:bg-gray-200', iconText: 'text-gray-500', labelText: 'text-gray-500' }
   }
   
   if (index === 2) {
     if (props.status === 'selesai') {
-      return { border: 'border-emerald-500', bg: 'bg-emerald-500', hoverBg: 'hover:bg-emerald-600', iconText: 'text-white', labelText: 'text-emerald-500' } // Aktif (Solid)
+      return { border: 'border-green', bg: 'bg-green', hoverBg: 'hover:bg-emerald-600', iconText: 'text-white', labelText: 'text-green' } // Aktif (Solid)
     }
-    return { border: 'border-gray-400', bg: 'bg-gray-100', hoverBg: 'hover:bg-gray-200', iconText: 'text-gray-500', labelText: 'text-gray-500' }
+    return { border: 'border-tertiary', bg: 'bg-gray-100', hoverBg: 'hover:bg-gray-200', iconText: 'text-gray-500', labelText: 'text-gray-500' }
   }
   
-  return { border: 'border-gray-400', bg: 'bg-gray-100', hoverBg: 'hover:bg-gray-200', iconText: 'text-gray-500', labelText: 'text-gray-500' }
+  return { border: 'border-tertiary', bg: 'bg-gray-100', hoverBg: 'hover:bg-gray-200', iconText: 'text-gray-500', labelText: 'text-gray-500' }
 }
 
 const getLineColorClass = (index: number) => {
   if (index === 0) { 
     if (props.status === 'diproses' || props.status === 'selesai') {
-      return 'bg-gradient-to-r from-amber-500 to-blue-500' 
+      return 'bg-gradient-to-r from-yellow to-purple' 
     }
   } else if (index === 1) { 
     if (props.status === 'selesai') {
-      return 'bg-gradient-to-r from-blue-500 to-emerald-500' 
+      return 'bg-gradient-to-r from-purple to-green' 
     }
   }
-  return 'bg-gray-400' 
+  return 'bg-tertiary' 
 }
 </script>
 

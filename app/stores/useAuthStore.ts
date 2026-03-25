@@ -215,6 +215,51 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
+    async changePassword(payload: { old_password: string; new_password: string; [key: string]: any }) {
+      if (!this.token) {
+        throw new Error('Tidak ada akses (Token hilang).')
+      }
+
+      this.loading = true
+      this.message = null
+      this.error = null
+      this.validationErrors = {}
+      const apiFetch = useApi()
+
+      try {
+        const response = await apiFetch<ApiResponse>('auth/change-password/', {
+          method: 'PUT', 
+          headers: {
+            Authorization: `Token ${this.token}`,
+            Accept: 'application/json',
+          },
+          body: payload
+        })
+
+        if (response.success) {
+          this.message = response.message || 'Password berhasil diubah'
+          
+          await this.logout() 
+          
+          return response
+        }
+
+      } catch (err: any) {
+        console.error('Failed to change password:', err)
+        const apiResponse = err.data || {}
+        const errorMsg = apiResponse?.message || 'Gagal mengubah password'
+        
+        this.error = errorMsg
+        if (apiResponse?.errors) {
+          this.validationErrors = apiResponse.errors
+        }
+        
+        throw apiResponse
+      } finally {
+        this.loading = false
+      }
+    },
+
     async logout() {
       this.loading = true
       const apiFetch = useApi()

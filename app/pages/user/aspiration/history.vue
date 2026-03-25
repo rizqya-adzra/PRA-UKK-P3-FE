@@ -75,6 +75,12 @@ const executeExport = async () => {
 
 <template>
   <div class="flex flex-col items-center justify-center gap-7">
+    <div class="w-full mb-4">
+      <div class="flex items-center justify-center gap-10 bg-yellow-50 border border-amber-300 rounded-4xl px-14 py-6">
+        <UIcon name="i-lucide-lightbulb" class="size-8 bg-amber-600" />
+        <p class="text-amber-600 font-semibold">Hanya menampilkan data Aspirasi yang telah <br> selesai dan dibatalkan</p>
+      </div>
+    </div>
     <p class="text-3xl font-bold text-center">Arsip History</p>
     <div class="space-y-1 w-full max-w-2xl">
       <UiInput 

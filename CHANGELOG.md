@@ -78,3 +78,6 @@
 ### V1.0.12
 - modified profile in both admin and user prefix to have image update
 - modifed notification in both admin and user prefix to have mark as read and click to detail
+
+### V1.1.0
+- major changes in all of the designs

@@ -31,21 +31,21 @@ watch(selected, (newValue) => {
       trailing-icon=""
       variant="none"
       :ui="{
-        content: 'bg-[#E9ECF6]/80 backdrop-blur-md ring-0 border-none rounded-2xl p-3 min-w-[120px]',
+        content: 'bg-white/80 backdrop-blur-md ring-0 border-none rounded-2xl p-3 min-w-[120px]',
         input: 'hidden h-0 w-0 p-0 m-0 border-none', 
-        item: 'hover:bg-transparent data-[highlighted]:bg-black/5 justify-center p-2 cursor-pointer transition-colors rounded-xl'
+        item: 'hover:bg-transparent data-[highlighted]:bg-tertiary/5 justify-center p-2 cursor-pointer transition-colors rounded-xl'
       }"
     >
       <template #default="{ open }">
         <button 
           type="button"
           :class="[
-            'h-10 w-38 rounded-full flex items-center justify-center gap-2 outline-none transition-all duration-300 cursor-pointer border-2 border-gray-500',
-            open ? 'bg-[#E9ECF6]' : 'bg-transparent hover:bg-[#E9ECF6]/50 focus:bg-[#E9ECF6]/50'
+            'h-10 w-38 rounded-full flex items-center justify-center gap-2 outline-none transition-all duration-300 cursor-pointer border-2 border-tertiary',
+            open ? 'bg-white' : 'bg-transparent hover:bg-white/50 focus:bg-white/50'
           ]"
         >
-          <span class="text-sm font-normal text-gray-500 tracking-wide">Pagination</span>
-          <span class="text-sm font-bold text-black">{{ selected?.label }}</span>
+          <span class="text-sm font-semibold text-tertiary tracking-wide">Pagination</span>
+          <span class="text-sm font-bold text-tertiary">{{ selected?.label }}</span>
         </button>
       </template>
 

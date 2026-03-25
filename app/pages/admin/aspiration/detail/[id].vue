@@ -18,8 +18,13 @@ const route = useRoute()
 const { fetchAspirationDetail, createAspirationProgress, exportAspirationPDF } = useAspiration() 
 const aspirationId = route.params.id as string
 const { isExportModalOpen, isExporting, executeExport } = useExportPDF()
+const statusColors = {
+  menunggu: 'text-yellow-500',
+  proses: 'text-blue-500',
+  selesai: 'text-green-500',
+  dibatalkan: 'text-red-500'
+}
 const { formatDate } = useFormatter()
-
 const { data: response, pending, error } = await fetchAspirationDetail(aspirationId)
 const aspiration = computed(() => response.value?.data)
 
@@ -128,7 +133,7 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <div class="px-48">
+  <div>
     <div v-if="pending" class="flex justify-center items-center py-20 min-h-[50vh]">
       <UIcon name="i-lucide-loader-2" class="size-10 text-blue-500 animate-spin" />
     </div>
@@ -209,11 +214,9 @@ const handleSubmit = async () => {
           <div 
             v-for="(update, index) in progressUpdates" 
             :key="update.id"
-            class="bg-[#F1F9FF] rounded-3xl md:rounded-4xl py-8 md:py-10 px-6 md:px-10 w-full mt-8"
+            class="bg-gray-100 rounded-3xl md:rounded-4xl py-8 md:py-10 px-6 md:px-10 w-full mt-8"
           >
             <div class="flex flex-col md:flex-row gap-4 md:gap-7">
-              <div class="hidden md:block border-l-2 border-black/10 min-h-full"></div>
-              
               <div class="flex-1 w-full">
                 <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
                   <div class="flex items-center gap-3">
@@ -223,8 +226,8 @@ const handleSubmit = async () => {
                     <div class="flex flex-col items-start min-w-0">
                       <span class="font-bold text-black text-[14px] md:text-[15px] leading-tight truncate w-full">
                         Admin ({{ update.admin_name }})
-                      </span>
-                      <span class="text-xs text-blue-500 mt-1 font-semibold uppercase">
+                      </span> 
+                      <span :class="`text-xs mt-1 font-semibold uppercase ${statusColors[update.status.toLowerCase() as keyof typeof statusColors] || 'text-gray-500'}`">
                         {{ update.status }}
                       </span>
                     </div>

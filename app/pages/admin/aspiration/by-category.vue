@@ -6,7 +6,7 @@ import { useFilterPagination } from '~/composables/useFilterPagination'
 
 definePageMeta({
   middleware: 'auth',
-  layout: 'default'
+  layout: 'admin'
 })
 
 const router = useRouter()
@@ -15,9 +15,6 @@ const { fetchAspirations, exportAspirationsExcel } = useAspiration()
 const {
   searchParams,
   categoryParams,
-  statusParams,
-  startDateParams,
-  endDateParams,
   pageParams,
   limitParams,
   apiQuery,
@@ -42,7 +39,7 @@ watch(
 )
 
 const goToDetail = (id: string) => {
-  router.push(`/user/aspiration/detail/${id}`)
+  router.push(`/admin/aspiration/detail/${id}`)
 }
 
 const isExportModalOpen = ref(false)
@@ -75,41 +72,43 @@ const executeExport = async () => {
 </script>
 
 <template>
-  <div class="border-6 border-white p-6 rounded-4xl flex justify-between items-center">
-    <p class="font-bold">Tambah Aspirasi yang <br> ingin kamu sampaikan</p>
-    <NuxtLink to="/user/aspiration/create">
-      <UiButton label="BUAT ASPIRASI" variant="imperative" color="gradient" />
-    </NuxtLink>
-  </div>
-
-  <svg class="w-full text-gray-300 my-14" height="4" xmlns="http://www.w3.org/2000/svg">
-    <line 
-      x1="2" y1="2" x2="100%" y2="2" 
-      stroke="currentColor" stroke-width="2" stroke-dasharray="16 20" stroke-linecap="round" 
-    />
-  </svg>
-
-  <div class="flex flex-col items-center justify-center gap-7">
-    <p class="text-3xl font-bold text-center">Semua List Aspirasi</p>
-    <div class="space-y-1 w-full max-w-2xl">
+  <div>  
+    <div class="w-1/2">
       <UiInput 
         v-model="searchParams" 
-        placeholder="Cari aspirasi..." 
+        placeholder="Cari laporan aspirasi..." 
         variant="search" 
-        icon="i-lucide-search"
+        icon="i-lucide-search-check"
       />
+    </div>
+    <div class="flex items-center justify-between mt-8">
+      <p class="text-4xl font-bold text-center ml-2">Berdasarkan Kategori</p>
       <div class="flex items-center justify-center gap-2">
-        <UiDropdownDate 
-          v-model:startDate="startDateParams" 
-          v-model:endDate="endDateParams" 
-        />    
-        <UiDropdownCategory v-model="categoryParams" />
-        <UiDropdownStatus v-model="statusParams" />    
+        <UiCategoryFilter v-model="categoryParams" />
       </div>
     </div>
-  </div>
-
-  <div class="w-full my-20">
+  
+    <div class="w-full my-6">  
+      <div v-if="pending" class="w-full flex justify-center py-24">
+        <p class="text-gray-500 animate-pulse font-medium">Sedang memuat data...</p>
+      </div>
+  
+      <div v-else-if="listAspirasi.length === 0" class="bg-white rounded-4xl w-full px-12 py-24 flex justify-center items-center">
+        <p class="text-center text-gray-500">
+          {{ searchParams || categoryParams ? 'Tidak ada aspirasi yang cocok.' : 'Masih kosong' }}
+        </p>
+      </div>
+  
+      <div v-else class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+        <UiCard 
+          v-for="item in listAspirasi" 
+          :key="item.id" 
+          :report="item" 
+          @click="goToDetail(item.id)" 
+          class="cursor-pointer"
+        />
+      </div>
+    </div>
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-4 mb-4">
         <button 
@@ -117,10 +116,10 @@ const executeExport = async () => {
           :disabled="pageParams === 1"
           class="w-6 h-6 flex items-center justify-center rounded-full disabled:opacity-20 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors cursor-pointer"
         >
-          <UIcon name="i-lucide-chevron-left" class="size-6 text-black" />
+          <UIcon name="i-lucide-chevron-left" class="size-6 text-tertiary" />
         </button>
 
-        <span class="select-none">
+        <span class="select-none text-tertiary font-semibold">
           {{ pageParams }} / {{ totalPages }}
         </span>
 
@@ -129,7 +128,7 @@ const executeExport = async () => {
           :disabled="pageParams >= totalPages"
           class="w-6 h-6 flex items-center justify-center rounded-full disabled:opacity-20 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors cursor-pointer"
         >
-          <UIcon name="i-lucide-chevron-right" class="size-6 text-black" />
+          <UIcon name="i-lucide-chevron-right" class="size-6 text-tertiary" />
         </button>
       </div>
       
@@ -137,26 +136,6 @@ const executeExport = async () => {
         <UiDropdownPagination v-model="limitParams" />
         <UiButton label="Export to Excel" variant="export" color="green" @click="isExportModalOpen = true" />
       </div>
-    </div>
-
-    <div v-if="pending" class="w-full flex justify-center py-24">
-      <p class="text-gray-500 animate-pulse font-medium">Sedang memuat data...</p>
-    </div>
-
-    <div v-else-if="listAspirasi.length === 0" class="bg-white rounded-4xl w-full px-12 py-24 flex justify-center items-center">
-      <p class="text-center text-gray-500">
-        {{ searchParams || categoryParams || statusParams ? 'Tidak ada aspirasi yang cocok.' : 'Masih kosong nih yuk bikin dulu!' }}
-      </p>
-    </div>
-
-    <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <UiCard 
-        v-for="item in listAspirasi" 
-        :key="item.id" 
-        :report="item" 
-        @click="goToDetail(item.id)" 
-        class="cursor-pointer"
-      />
     </div>
   </div>
 
