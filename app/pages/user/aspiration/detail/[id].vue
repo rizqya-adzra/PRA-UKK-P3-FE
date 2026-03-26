@@ -32,7 +32,7 @@ const timelineStatus = computed(() => {
   const stat = aspiration.value.status.toLowerCase()
   if (stat === 'proses') return 'diproses'
   return stat as 'menunggu' | 'diproses' | 'selesai' | 'dibatalkan'
-})
+}) 
 
 const progressUpdates = computed(() => {
   if (!aspiration.value?.progress_updates) return []
@@ -130,7 +130,10 @@ const executeExportPDF = async () => {
 
         <div class="text-start space-y-4 mt-8 md:mt-10">
           <p class="text-xl md:text-3xl font-bold">{{ aspiration.title }}</p>
-          <p class="text-sm md:text-base">{{ aspiration.description }}</p>
+          <div>
+            <p class="text-sm md:text-base font-semibold text-tertiary">{{ aspiration.location_detail.name }}</p>
+            <p class="text-sm md:text-base">{{ aspiration.description }}</p>
+          </div>
           
           <div v-if="aspiration.attachments && aspiration.attachments.length > 0" class="flex flex-wrap gap-4 mt-4">
             <template v-for="file in aspiration.attachments" :key="file.id">

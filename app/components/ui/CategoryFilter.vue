@@ -6,11 +6,11 @@ const props = defineProps<{
 const emit = defineEmits(['update:modelValue'])
 
 const categories = [
-  { id: 'bea0bfff-b4a7-4dae-a8a3-78ea6756e703', label: 'Fasilitas' },
-  { id: 'd4b3f29e-0995-4709-9825-0ca48a87dbb0', label: 'Lingkungan' },
-  { id: '4a7b9e07-9a43-4426-9eef-74987aa467a5', label: 'Pendidikan' },
-  { id: '3541c7b7-ec66-402f-bea1-6d2dc63752a7', label: 'Karakter' },
-  { id: '60180a56-2df6-4b2e-bb32-43844d7afb86', label: 'Ibadah' }
+  { id: '9c419047-3b39-4b2b-a42b-34101fd166c9', label: 'Fasilitas' },
+  { id: 'b87f6a78-10a0-422a-a22e-ecdec921f702', label: 'Lingkungan' },
+  { id: 'c2dc2a64-c057-4845-bedc-2364dea0ad45', label: 'Pendidikan' },
+  { id: '62c1cee5-b99f-456c-b24a-f2b49fad3017', label: 'Karakter' },
+  { id: '96d3c761-94fe-4ae8-a68e-89502144498e', label: 'Ibadah' }
 ]
 
 const selectCategory = (id: string) => {

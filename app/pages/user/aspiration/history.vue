@@ -14,6 +14,7 @@ const { fetchAspirationHistories, exportAspirationHistoriesExcel } = useAspirati
 
 const {
   searchParams,
+  locationParams,
   categoryParams,
   startDateParams,
   endDateParams,
@@ -94,41 +95,13 @@ const executeExport = async () => {
           v-model:startDate="startDateParams" 
           v-model:endDate="endDateParams" 
         />    
+        <UiDropdownLocation v-model="locationParams" />
         <UiDropdownCategory v-model="categoryParams" />
       </div>
     </div>
   </div>
 
-  <div class="w-full my-20">
-    <div class="flex items-center justify-between">
-      <div class="flex items-center gap-4 mb-4">
-        <button 
-          @click="prevPage" 
-          :disabled="pageParams === 1"
-          class="w-6 h-6 flex items-center justify-center rounded-full border-2 border-black disabled:opacity-20 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors cursor-pointer"
-        >
-          <UIcon name="i-lucide-chevron-left" class="size-6 text-black" />
-        </button>
-
-        <span class="select-none">
-          page {{ pageParams }} / {{ totalPages }}
-        </span>
-
-        <button 
-          @click="nextPage" 
-          :disabled="pageParams >= totalPages"
-          class="w-6 h-6 flex items-center justify-center rounded-full border-2 border-black disabled:opacity-20 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors cursor-pointer"
-        >
-          <UIcon name="i-lucide-chevron-right" class="size-6 text-black" />
-        </button>
-      </div>
-      
-      <div class="flex items-center justify-end gap-2 mb-4">
-        <UiDropdownPagination v-model="limitParams" />
-        <UiButton label="Export to Excel" variant="export" color="green" @click="isExportModalOpen = true" />
-      </div>
-    </div>
-
+  <div class="w-full mt-12 mb-6">
     <div v-if="pending" class="w-full flex justify-center py-24">
       <p class="text-gray-500 animate-pulse font-medium">Sedang memuat data...</p>
     </div>
@@ -147,6 +120,34 @@ const executeExport = async () => {
         @click="goToDetail(item.id)" 
         class="cursor-pointer"
       />
+    </div>
+  </div>
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-4 mb-4">
+      <button 
+        @click="prevPage" 
+        :disabled="pageParams === 1"
+        class="w-6 h-6 flex items-center justify-center rounded-full disabled:opacity-20 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors cursor-pointer"
+      >
+        <UIcon name="i-lucide-chevron-left" class="size-6 text-tertiary" />
+      </button>
+
+      <span class="select-none text-tertiary font-semibold">
+        {{ pageParams }} / {{ totalPages }}
+      </span>
+
+      <button 
+        @click="nextPage" 
+        :disabled="pageParams >= totalPages"
+        class="w-6 h-6 flex items-center justify-center rounded-full disabled:opacity-20 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors cursor-pointer"
+      >
+        <UIcon name="i-lucide-chevron-right" class="size-6 text-tertiary" />
+      </button>
+    </div>
+    
+    <div class="flex items-center justify-end gap-2 mb-4">
+      <UiDropdownPagination v-model="limitParams" />
+      <UiButton label="Export to Excel" variant="export" color="green" @click="isExportModalOpen = true" />
     </div>
   </div>
 

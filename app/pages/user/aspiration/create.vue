@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { onBeforeRouteLeave } from 'vue-router'
 import { useAuthStore } from '~/stores/useAuthStore'
 import { useAspiration } from '~/composables/api/useAspiration' 
 import defaultProfileImage from '~/assets/images/core_profile.jpg'
@@ -27,13 +26,13 @@ const showTosModal = ref(false)
 
 const form = ref({
   title: '',
-  location: '',
   description: '',
+  location_id: '',
   category_id: '' 
 })
 
 const isFormDirty = computed(() => {
-  return form.value.title !== '' || form.value.location !== '' || 
+  return form.value.title !== '' ||
          form.value.description !== '' || form.value.category_id !== '' || 
          selectedFiles.value.length > 0
 })
@@ -60,7 +59,7 @@ onMounted(async () => {
 })
 
 const handleSubmit = async () => {
-  if (!form.value.title || !form.value.location || !form.value.description || !form.value.category_id) {
+  if (!form.value.title || !form.value.location_id || !form.value.description || !form.value.category_id) {
     showAlert("Data Tidak Lengkap", "Mohon lengkapi semua data form (Judul, Lokasi, Deskripsi, Kategori)!")
     return
   }
@@ -75,7 +74,7 @@ const handleSubmit = async () => {
   try {
     const formData = new FormData()
     formData.append('title', form.value.title)
-    formData.append('location', form.value.location)
+    formData.append('location_id', form.value.location_id)
     formData.append('description', form.value.description)
     formData.append('category_id', form.value.category_id)
     
@@ -129,8 +128,15 @@ const handleSubmit = async () => {
 
       <div>
         <div class="space-y-3">
+          <div class="flex gap-2 items-center z-10">
+            <UiDropdownLocation v-model="form.location_id" />
+            <UiDropdownCategory v-model="form.category_id" />
+            <UiFileUpload 
+              v-if="selectedFiles.length < 5"
+              @file-selected="handleFileAdded" 
+            />
+          </div>
           <UiInput v-model="form.title" label="Judul" placeholder="Tambah judul" variant="gray" />
-          <UiInput v-model="form.location" label="Lokasi" placeholder="Tambah lokasi" variant="gray" />
           <UiInput v-model="form.description" label="Deskripsi" placeholder="Tambah deskripsi" type="textarea" variant="gray" />
         </div>
         
@@ -158,15 +164,6 @@ const handleSubmit = async () => {
               <UIcon name="i-lucide-x" class="size-4" />
             </button>
           </div>
-        </div>
-
-        <div class="flex gap-2 items-center z-10">
-          <UiDropdownCategory v-model="form.category_id" />
-          
-          <UiFileUpload 
-            v-if="selectedFiles.length < 5"
-            @file-selected="handleFileAdded" 
-          />
         </div>
       </div>
 

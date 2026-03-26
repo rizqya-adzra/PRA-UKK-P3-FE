@@ -6,6 +6,7 @@ export function useFilterPagination() {
   const router = useRouter()
 
   const searchParams = ref(route.query.search?.toString() || '')
+  const locationParams = ref(route.query.location?.toString() || '')
   const categoryParams = ref(route.query.category?.toString() || '')
   const statusParams = ref(route.query.status?.toString() || '')
   const startDateParams = ref(route.query.start_date?.toString() || '')
@@ -21,6 +22,7 @@ export function useFilterPagination() {
     const query: Record<string, string | number> = {}
     
     if (searchParams.value) query.search = searchParams.value
+    if (locationParams.value) query.location = locationParams.value
     if (categoryParams.value) query.category = categoryParams.value
     if (statusParams.value) query.status = statusParams.value
     if (startDateParams.value) query.start_date = startDateParams.value
@@ -41,7 +43,7 @@ export function useFilterPagination() {
     if (pageParams.value < totalPages) pageParams.value++
   }
 
-  watch([categoryParams, statusParams, startDateParams, endDateParams, selectParams, limitParams], () => {
+  watch([locationParams, categoryParams, statusParams, startDateParams, endDateParams, selectParams, limitParams], () => {
     applyFilter(true) 
   })
 
@@ -61,6 +63,7 @@ export function useFilterPagination() {
 
   return {
     searchParams,
+    locationParams,
     categoryParams,
     statusParams,
     startDateParams,

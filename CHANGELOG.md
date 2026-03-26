@@ -81,3 +81,6 @@
 
 ### V1.1.0
 - major changes in all of the designs
+
+### V1.1.1
+- added new locations data 

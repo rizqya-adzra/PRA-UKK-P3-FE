@@ -5,16 +5,13 @@ const props = defineProps<{
 
 const emit = defineEmits(['update:modelValue'])
 
-const categories = [
-  { id: '9c419047-3b39-4b2b-a42b-34101fd166c9', label: 'Fasilitas' as const},
-  { id: 'b87f6a78-10a0-422a-a22e-ecdec921f702', label: 'Lingkungan' as const},
-  { id: 'c2dc2a64-c057-4845-bedc-2364dea0ad45', label: 'Pendidikan' as const},
-  { id: '62c1cee5-b99f-456c-b24a-f2b49fad3017', label: 'Karakter' as const},
-  { id: '96d3c761-94fe-4ae8-a68e-89502144498e', label: 'Ibadah' as const}
+const locations = [
+  { id: '321a1c15-3b3e-4915-b694-caf6aa7cb8a1', label: 'R. 128' as const},
+  { id: '88283971-ddc2-4439-8c2b-dba2566e2d7b', label: 'R. 129' as const},
 ]
 
-const initialCategory = categories.find(c => c.id === props.modelValue) || undefined
-const selected = ref(initialCategory)
+const initialLocation = locations.find(c => c.id === props.modelValue) || undefined
+const selected = ref(initialLocation)
 
 watch(selected, (newValue) => {
   if (newValue) {
@@ -29,7 +26,7 @@ watch(selected, (newValue) => {
   <div>
     <USelectMenu 
       v-model="selected" 
-      :items="categories"
+      :items="locations"
       trailing-icon=""
       variant="none"
       :ui="{
@@ -47,7 +44,7 @@ watch(selected, (newValue) => {
             open ? 'bg-[#E9ECF6]' : 'bg-white hover:bg-[#E9ECF6] focus:bg-[#E9ECF6]'
           ]"
         >
-          <span class="text-sm truncate">{{ selected?.label || 'Kategori' }}</span>
+          <span class="text-sm truncate">{{ selected?.label || 'Lokasi' }}</span>
           <UIcon 
             v-if="selected"
             name="i-lucide-x" 
@@ -63,10 +60,7 @@ watch(selected, (newValue) => {
       </template>
 
       <template #item="{ item }">
-          <UiLabel 
-            :text="item.label" 
-            variant="solid" 
-          />
+        <p class="font-semibold text-tertiary hover:text-black duration-300">{{ item.label }}</p>
       </template>
     </USelectMenu>
   </div>

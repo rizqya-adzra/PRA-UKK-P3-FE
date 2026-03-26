@@ -17,6 +17,11 @@ export interface CategoryDetail {
   color: string
 }
 
+export interface LocationDetail {
+  id: string
+  name: string
+}
+
 export interface StudentInfo {
   name: string
   nis: number
@@ -44,11 +49,13 @@ export interface Aspiration {
   id: string
   report_id: string
   student: string
-  student_image: string | null
+  student_image: string | undefined
   student_info: StudentInfo
   title: string
   description: string
   location: string
+  location_id: string
+  location_detail: LocationDetail
   category_id: string
   category_detail: CategoryDetail
   attachments: Attachment[]
@@ -84,6 +91,15 @@ export interface AspirationCategoryStats {
   ibadah: number
 }
 
+export interface UserRanking {
+  id: string
+  image: string
+  name: number
+  nis: number
+  rombel: number
+  aspiration_count: number
+}
+
 export interface StatsResponse {
   success: boolean
   status_code: number
@@ -98,6 +114,14 @@ export interface CategoryStatsResponse {
   message: string
   count: number
   data: AspirationCategoryStats 
+}
+
+export interface UserRankingResponse {
+  success: boolean
+  status_code: number
+  message: string
+  count: number
+  data: UserRanking[]
 }
 
 
@@ -178,6 +202,15 @@ export const useAspiration = () => {
     })
   }
 
+  const fetchUserRanking = async (queryParams?: any) => {
+    return useFetch<UserRankingResponse>('/user/ranking/', {
+      key: 'aspiration-user-ranking',
+      baseURL: config.public.apiBase,
+      headers: getHeaders(),
+      query: queryParams,
+    })
+  }
+
   const fetchAspirationHistories = async (queryParams?: any) => {
     return useFetch<AspirationResponse>('/aspiration/history/', {
       key: 'aspiration-histories',
@@ -246,6 +279,7 @@ export const useAspiration = () => {
     createAspirationProgress,
     fetchAspirationStats,
     fetchAspirationCategoryStats,
+    fetchUserRanking,
     fetchAspirationHistories,
     exportAspirationsExcel,
     exportAspirationHistoriesExcel,

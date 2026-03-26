@@ -25,9 +25,8 @@ const profileForm = ref({
 
 const isChangePasswordModalOpen = ref(false)
 const passwordForm = ref({
-  oldPassword: '',
-  newPassword: '',
-  confirmPassword: ''
+  old_password: '',
+  new_password: '',
 })
 
 const { data: statsResponse } = await fetchAspirationStats()
@@ -105,17 +104,13 @@ const handleSaveProfile = async () => {
 }
 
 const handleSavePassword = async () => {
-  if (passwordForm.value.newPassword !== passwordForm.value.confirmPassword) {
-    alert("Password baru dan konfirmasi tidak cocok!")
-    return
-  }
-  
   try {
-    passwordForm.value = { oldPassword: '', newPassword: '', confirmPassword: '' }
-    isChangePasswordModalOpen.value = false
-  } catch (error) {
-    console.error('Gagal mengubah password:', error)
-  }
+      await auth.changePassword(passwordForm.value)
+      alert('Password berhasil diubah! Silakan login kembali')
+      passwordForm.value = { old_password: '', new_password: '' }
+    } catch (error) {
+      console.error('Gagal ubah password', error)
+    }
 }
 
 const handleConfirmLogout = async () => {
@@ -309,24 +304,17 @@ watch(isEditProfileModalOpen, (isOpen) => {
   <UiModalDefault v-model="isChangePasswordModalOpen" title="Change Password" maxWidth="max-w-md">
     <div class="space-y-5">
       <UiInput 
-        v-model="passwordForm.oldPassword" 
+        v-model="passwordForm.old_password" 
         label="Password Lama" 
         type="password"
         placeholder="Masukkan password lama" 
         variant="gray" 
       />
       <UiInput 
-        v-model="passwordForm.newPassword" 
+        v-model="passwordForm.new_password" 
         label="Password Baru" 
         type="password"
         placeholder="Masukkan password baru" 
-        variant="gray" 
-      />
-      <UiInput 
-        v-model="passwordForm.confirmPassword" 
-        label="Konfirmasi Password Baru" 
-        type="password"
-        placeholder="Ketik ulang password baru" 
         variant="gray" 
       />
     </div>

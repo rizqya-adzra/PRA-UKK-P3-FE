@@ -1,16 +1,22 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import defaultImage from '~/assets/images/core_profile.jpg'
 
 export interface Report {
   id: string
   report_id: string
   student: string
+  student_image: string | undefined
   student_info: {
     name: string
   }
   title: string
   description: string
-  location: string
+  location_id: string
+  location_detail: {
+    id: string
+    name: string
+  }
   category_id: string
   category_detail: {
     id: string
@@ -47,7 +53,10 @@ const formattedDate = computed(() => {
       <UiLabel :text="report.status_display" variant="outline" color="orange" />
     </div>
     
-    <p class="text-tertiary text-sm mb-3">{{ formattedDate || '-' }}</p>
+    <div class="flex gap-2 items-center justify-between">
+      <p class="text-tertiary font-semibold text-sm mb-3">{{ report?.location_detail?.name || '-' }}</p>
+      <p class="text-tertiary text-sm mb-3">{{ formattedDate || '-' }}</p>
+    </div>
     
     <h3 class="font-bold text-2xl text-black leading-tight mb-4 line-clamp-2">
       {{ report?.title }}
@@ -71,7 +80,7 @@ const formattedDate = computed(() => {
     </svg>
 
     <div class="flex items-center">
-      <div class="w-12 h-12 rounded-full bg-[#A3A3A3] shrink-0 mr-4"></div>
+      <img :src="report?.student_image || defaultImage" alt="" class="w-12 h-12 rounded-full bg-[#A3A3A3] shrink-0 mr-4">
       
       <div class="flex flex-col">
         <span class="font-bold text-black text-sm truncate">{{ report?.student_info?.name || 'No Name' }}</span>

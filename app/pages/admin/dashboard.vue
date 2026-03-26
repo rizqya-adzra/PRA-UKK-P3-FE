@@ -8,20 +8,12 @@ definePageMeta({
   layout: 'admin'
 })
 
-const { fetchAspirations, fetchAspirationStats, fetchAspirationCategoryStats } = useAspiration() 
+const { fetchAspirations, fetchAspirationStats, fetchUserRanking } = useAspiration() 
 const { data: response, pending } = await fetchAspirations()
 const { data: stats } = await fetchAspirationStats()
-const { data: category_stats } = await fetchAspirationCategoryStats()
+const { data: rankingResponse } = await fetchUserRanking() 
 const router = useRouter()
-
-const topStudents = [
-  { id: 1, name: 'Rizqya Adzra Zahira Sudrajat', nis: '12310021 | PPLG XII-5' },
-  { id: 2, name: 'Rizqya Adzra Zahira Sudrajat', nis: '12310021 | PPLG XII-5' },
-  { id: 3, name: 'Rizqya Adzra Zahira Sudrajat', nis: '12310021 | PPLG XII-5' },
-  { id: 4, name: 'Rizqya Adzra Zahira Sudrajat', nis: '12310021 | PPLG XII-5' },
-  { id: 5, name: 'Rizqya Adzra Zahira Sudrajat', nis: '12310021 | PPLG XII-5' },
-  { id: 6, name: 'Rizqya Adzra Zahira Sudrajat', nis: '12310021 | PPLG XII-5' },
-]
+const topStudents = computed(() => rankingResponse.value?.data?.slice(0, 6) || [])
 
 const listAspirasi = computed(() => response.value?.data.slice(0, 4) || [])
 
@@ -47,28 +39,21 @@ const goToDetail = (id: string) => {
         <div class="grid grid-cols-3 gap-2">
           <div class="flex flex-col items-center text-center gap-3 bg-[#E0FFE4] text-green border border-green hover:bg-green hover:text-white transition-all duration-300 rounded-4xl px-4 py-10">
             <UIcon name="i-lucide-chart-pie" class="size-6" />
-            <p class="text-3xl font-bold">{{ category_stats?.data?.fasilitas || 0 }}</p>
+            <p class="text-3xl font-bold">{{ stats?.data?.selesai || 0 }}</p>
             <p class="font-medium text-sm">Selesai</p>
           </div>
           
           <div class="flex flex-col items-center text-center gap-3 bg-[#E6EBFF] text-purple border border-purple hover:bg-purple hover:text-white transition-all duration-300 rounded-4xl px-4 py-10">
             <UIcon name="i-lucide-tree-pine" class="size-6" />
-            <p class="text-3xl font-bold">{{ category_stats?.data?.lingkungan || 0 }}</p>
+            <p class="text-3xl font-bold">{{ stats?.data?.proses || 0 }}</p>
             <p class="font-medium text-sm">Diproses</p>
           </div>
           
           <div class="flex flex-col items-center text-center gap-3 bg-[#FFF2D9] text-yellow border border-yellow hover:bg-yellow hover:text-white transition-all duration-300 rounded-4xl px-4 py-10">
             <UIcon name="i-lucide-graduation-cap" class="size-6" />
-            <p class="text-3xl font-bold">{{ category_stats?.data?.pendidikan || 0 }}</p>
+            <p class="text-3xl font-bold">{{ stats?.data?.menunggu || 0 }}</p>
             <p class="font-medium text-sm">Menunggu</p>
           </div>
-        </div>
-
-        <div class="mt-5 space-y-2">
-          <div class="w-full bg-gray-200 rounded-full h-2.5 flex items-center">
-            <div class="bg-electric-blue h-2.5 rounded-full" style="width: 85%"></div>
-          </div>
-          <p class="text-center text-[10px] font-bold text-gray-400">85% ASPIRASI TERATASI</p>
         </div>
       </div>
 
@@ -80,15 +65,36 @@ const goToDetail = (id: string) => {
         
         <div class="flex flex-col gap-3">
           <div 
-            v-for="student in topStudents" 
+            v-for="(student, index) in topStudents" 
             :key="student.id" 
-            class="flex items-center gap-4 bg-[#F6F6F6] p-3 rounded-2xl px-4 py-6"
+            class="flex items-center gap-4 bg-[#F6F6F6] p-4 rounded-2xl hover:bg-gray-100 transition-colors duration-200"
           >
-            <img :src="defaultImage" alt="Profile" class="object-cover rounded-full w-10 h-10 bg-gray-300" />  
-            <div class="flex flex-col overflow-hidden space-y-1">
-              <span class="text-sm font-bold text-black truncate">{{ student.name }}</span>
-              <span class="text-xs text-gray-500 truncate">{{ student.nis }}</span>
+            <img 
+              :src="student.image || defaultImage" 
+              alt="Profile" 
+              class="object-cover rounded-full w-11 h-11 bg-gray-300 shadow-sm" 
+            /> 
+            
+            <div class="flex flex-col min-w-0 flex-1 space-y-0.5">
+              <span class="text-sm font-bold text-gray-900 truncate">
+                {{ student.name }}
+              </span>
+              <span class="text-[11px] text-gray-500 truncate flex items-center gap-1">
+                <span class="font-medium text-electric-blue">#{{ index + 1 }}</span>
+                <span v-if="student.nis" class="text-gray-300">|</span>
+                <span v-if="student.nis">{{ student.nis }}</span>
+                <span v-if="student.rombel" class="text-gray-300">|</span>
+                <span v-if="student.rombel" class="truncate">{{ student.rombel }}</span>
+              </span>
             </div>
+
+            <div class="ml-auto flex items-center justify-center font-bold bg-white rounded-full w-9 h-9 text-electric-blue text-xs">
+              {{ student.aspiration_count }}
+            </div>
+          </div>
+
+          <div v-if="topStudents.length === 0" class="text-center text-sm text-gray-400 py-4">
+            Belum ada data kontribusi.
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useNotification } from '~/composables/api/useNotification' 
+import defaultImage from '~/assets/images/core_profile.jpg'
 import { useAuthStore } from '~/stores/useAuthStore'
 
 const auth = useAuthStore()
@@ -76,7 +77,7 @@ onMounted(async () => {
 
     <div class="mt-auto shrink-0 pt-4">
       <NuxtLink to="/admin/profile" class="flex items-center gap-3 px-3 py-2 rounded-2xl hover:bg-gray-100 transition-colors cursor-pointer">
-        <img v-if="auth?.user?.image" :src="auth.user.image" alt="Profile" class="object-cover rounded-full w-12 h-12" />  
+        <img :src="auth?.user?.image || defaultImage" alt="Profile" class="object-cover rounded-full w-12 h-12" />  
         <div class="flex flex-col overflow-hidden">
           <span class="text-sm font-bold text-black truncate">{{ auth?.user?.name || '-' }}</span>
           <span class="text-xs text-tertiary truncate">{{ auth?.user?.email || '-' }}</span>

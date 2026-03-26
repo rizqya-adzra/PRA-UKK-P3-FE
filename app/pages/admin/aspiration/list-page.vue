@@ -14,7 +14,7 @@ const { fetchAspirations, exportAspirationsExcel } = useAspiration()
 
 const {
   searchParams,
-  categoryParams,
+  locationParams,
   statusParams,
   startDateParams,
   endDateParams,
@@ -92,7 +92,7 @@ const executeExport = async () => {
           v-model:startDate="startDateParams" 
           v-model:endDate="endDateParams" 
         />    
-        <UiDropdownCategory v-model="categoryParams" />
+        <UiDropdownLocation v-model="locationParams" />
         <UiDropdownStatus v-model="statusParams" />    
         <UiDropdownSelect v-model="selectParams" />    
       </div>
@@ -105,7 +105,7 @@ const executeExport = async () => {
   
       <div v-else-if="listAspirasi.length === 0" class="bg-white rounded-4xl w-full px-12 py-24 flex justify-center items-center">
         <p class="text-center text-gray-500">
-          {{ searchParams || categoryParams || statusParams ? 'Tidak ada aspirasi yang cocok.' : 'Masih kosong' }}
+          {{ searchParams || locationParams || statusParams ? 'Tidak ada aspirasi yang cocok.' : 'Masih kosong' }}
         </p>
       </div>
   
