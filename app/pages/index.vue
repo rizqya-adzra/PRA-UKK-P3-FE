@@ -26,7 +26,6 @@ definePageMeta({
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt...
       </p>
     </div>
-    
     <NuxtLink to="/login">
       <button class="bg-white px-12 hover:text-blue-500 py-5 hover:ring-6 hover:ring-white/50 duration-500 font-bold cursor-pointer">BUAT ASPIRASI MU!</button>
     </NuxtLink>

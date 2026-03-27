@@ -29,10 +29,10 @@ const inputVariants: Record<InputVariant, string> = {
   ].join(' '),
   
   search: [
-    'h-[64px] w-full rounded-full pl-16 pr-6', 
-    'bg-white text-black font-medium border-2 border-transparent',
+    'h-[48px] md:h-[64px] w-full rounded-full pl-12 md:pl-16 pr-4 md:pr-6', 
+    'bg-white text-xs md:text-base text-black font-medium border border-gray-100 md:border-2 md:border-transparent',
     'hover:border-blue-500 focus:border-blue-500', 
-    'placeholder:text-tertiary outline-none transition-all duration-300'
+    'placeholder:text-gray-400 md:placeholder:text-tertiary outline-none transition-all duration-300'
   ].join(' '),
 
   gray: [
@@ -75,7 +75,7 @@ const inputVariants: Record<InputVariant, string> = {
       <UIcon
         v-if="icon"
         :name="icon"
-        class="absolute left-6 top-1/2 -translate-y-1/2 size-6 transition-colors"
+        class="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 size-4 md:size-6 transition-colors"
         :class="error ? 'text-red-500' : 'text-black'"
       />
 

@@ -107,44 +107,52 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <div class="flex flex-col items-center">
-    <div class="bg-white rounded-4xl py-10 px-12 mt-3 mb-16 space-y-5 w-full">
+  <div class="flex flex-col items-center py-4 md:py-0 bg-[#F8F9FA] md:bg-transparent min-h-screen md:min-h-0">
+    <div class="bg-white rounded-3xl md:rounded-4xl py-8 md:py-10 px-6 md:px-12 mt-0 md:mt-3 mb-10 md:mb-16 space-y-5 md:space-y-6 w-full">
+      
       <div class="w-full flex items-center gap-3 text-left">
         <img 
           :src="auth?.user?.image || defaultProfileImage" 
           alt="Profile" 
-          class="size-12 rounded-full object-cover shrink-0 border border-gray-100"
+          class="size-10 md:size-12 rounded-full object-cover shrink-0 border border-gray-100"
         />
         
         <div class="flex flex-col items-start min-w-0">
-          <span class="font-bold text-black text-[15px] leading-tight truncate w-full">
+          <span class="font-bold text-black text-sm md:text-[15px] leading-tight truncate w-full">
             {{ auth.user?.name || '-' }}
           </span>
-          <span class="text-xs text-gray-500 mt-1 font-medium">
+          <span class="text-[10px] md:text-xs text-gray-500 mt-0.5 md:mt-1 font-medium">
             {{ auth.user?.nis || '-' }} • {{ auth.user?.rombel || '-' }} • {{ auth.user?.rayon || '-' }}
           </span>
         </div>
       </div>
 
       <div>
-        <div class="space-y-3">
-          <div class="flex gap-2 items-center z-10">
+        <div class="space-y-4">
+          <div class="flex flex-wrap md:flex-nowrap gap-2 items-center z-10">
             <UiDropdownLocation v-model="form.location_id" />
             <UiDropdownCategory v-model="form.category_id" />
             <UiFileUpload 
               v-if="selectedFiles.length < 5"
               @file-selected="handleFileAdded" 
+              class="hidden md:block shrink-0"
             />
           </div>
+
           <UiInput v-model="form.title" label="Judul" placeholder="Tambah judul" variant="gray" />
           <UiInput v-model="form.description" label="Deskripsi" placeholder="Tambah deskripsi" type="textarea" variant="gray" />
+          <UiFileUpload 
+              v-if="selectedFiles.length < 5"
+              @file-selected="handleFileAdded" 
+              class="block md:hidden shrink-0"
+            />
         </div>
         
-        <div class="flex gap-4 overflow-x-auto pt-2">
+        <div class="flex gap-3 md:gap-4 overflow-x-auto pt-3 pb-1 [&::-webkit-scrollbar]:hidden">
           <div 
             v-for="(item, index) in selectedFiles" 
             :key="index"
-            class="relative size-28 bg-gray-200 rounded-xl shrink-0 overflow-hidden group border border-gray-300"
+            class="relative size-20 md:size-28 bg-gray-200 rounded-xl md:rounded-2xl shrink-0 overflow-hidden group border border-gray-300"
           >
             <img 
               v-if="item.preview" 
@@ -153,21 +161,21 @@ const handleSubmit = async () => {
             />
             
             <div v-else class="w-full h-full flex flex-col items-center justify-center text-gray-500 bg-gray-100 p-2">
-              <UIcon name="i-lucide-file-text" class="size-8 mb-1" />
-              <span class="text-[10px] text-center truncate w-full px-1">{{ item.file.name }}</span>
+              <UIcon name="i-lucide-file-text" class="size-6 md:size-8 mb-1" />
+              <span class="text-[8px] md:text-[10px] text-center truncate w-full px-1">{{ item.file.name }}</span>
             </div>
 
             <button 
               @click="removeFile(index)"
-              class="absolute top-1 right-1 bg-black text-white rounded-full w-7 h-7 p-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
+              class="absolute top-1 right-1 bg-black/70 md:bg-black text-white rounded-full w-6 h-6 md:w-7 md:h-7 p-1 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 cursor-pointer flex items-center justify-center"
             >
-              <UIcon name="i-lucide-x" class="size-4" />
+              <UIcon name="i-lucide-x" class="size-3 md:size-4" />
             </button>
           </div>
         </div>
       </div>
 
-      <div class="space-y-2 mb-7 mt-4">
+      <div class="space-y-3 md:space-y-2 mb-6 md:mb-7 mt-4 md:mt-6">
         <UiCheckbox v-model="agreeTos" label="Saya sudah membaca dan menyetujui yang ada dalam" link="Terms of Service" @open-link="showTosModal = true" />
         <UiCheckbox v-model="agreeResponsibility" label="Saya mengetahui bahwa Aspirasi yang saya buat merupakan tanggung jawab saya" />
       </div>
@@ -178,6 +186,7 @@ const handleSubmit = async () => {
         color="black" 
         :showIcon="false"
         :disabled="isSubmitting"
+        class="w-full"
       />
     </div>
   </div>
@@ -187,12 +196,12 @@ const handleSubmit = async () => {
   </UiModalDefault>
 
   <UiModalDefault v-model="alertModal.isOpen" :title="alertModal.title" maxWidth="max-w-md" @update:model-value="(val) => !val && handleCloseAlert()">
-    <p class="text-gray-600 text-[15px]">{{ alertModal.message }}</p>
+    <p class="text-gray-600 text-sm md:text-[15px]">{{ alertModal.message }}</p>
   </UiModalDefault>
 
   <UiModalDefault v-model="leaveModal" title="Peringatan" maxWidth="max-w-md">
     <div class="flex flex-col gap-6 p-2">
-      <p class="text-gray-600 text-[15px]">
+      <p class="text-gray-600 text-sm md:text-[15px]">
         Kamu belum menyelesaikan pengisian form. Yakin ingin keluar? Perubahan tidak akan disimpan.
       </p>
       <div class="flex justify-end gap-3">

@@ -132,13 +132,13 @@ const isToday = (day: number | null) => {
     <UPopover 
       v-model:open="isPopoverOpen"
       :ui="{
-        content: 'flex flex-col bg-[#E9ECF6]/80 backdrop-blur-md ring-0 border-none text-black font-medium p-5 rounded-[32px] w-[280px] outline-none'
+        content: 'flex flex-col bg-[#E9ECF6]/80 backdrop-blur-md ring-0 border-none text-black font-medium p-4 md:p-5 rounded-[32px] w-[280px] md:w-[320px] outline-none'
       }"
     >
       <button 
         type="button"
         :class="[
-          'w-36 space-x-2 h-13 px-6 rounded-full flex items-center justify-between font-bold text-tertiary outline-none transition-all duration-300 border-2 cursor-pointer',
+          'h-8 md:h-10 w-28 md:w-38 space-x-2 px-4 md:px-6 rounded-full flex items-center justify-between font-bold text-tertiary outline-none transition-all duration-300 cursor-pointer border md:border-2',
           internalStart ? 'border-blue-500' : 'border-transparent',
           isPopoverOpen ? 'bg-[#E9ECF6]' : 'bg-white hover:bg-[#E9ECF6] focus:bg-[#E9ECF6]'
         ]"

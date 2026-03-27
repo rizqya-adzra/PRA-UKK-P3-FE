@@ -54,7 +54,7 @@ onUnmounted(() => {
             </button>
           </div>
 
-          <div class="p-8 overflow-y-auto">
+          <div class="py-4 px-2 md:p-8 overflow-y-auto">
             <slot />
           </div>
 

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+
 type ButtonVariant = 'primary' | 'export' | 'imperative'
 type ButtonColor = 'blue' | 'black' | 'green' | 'red' | 'gradient'
 
@@ -23,9 +25,9 @@ const colorVariants: Record<ButtonColor, string> = {
 }
 
 const sizeVariants: Record<ButtonVariant, string> = {
-  primary: 'h-[60px] w-full font-bold text-md', 
-  export: 'h-[40px] w-[240px] font-semibold text-sm group',
-  imperative: 'h-[66px] w-[260px] font-semibold text-md'
+  primary: 'h-[48px] md:h-[60px] w-full font-bold text-sm md:text-base', 
+  export: 'h-[36px] md:h-[40px] w-auto md:w-[240px] px-6 md:px-0 font-semibold text-xs md:text-sm group',
+  imperative: 'h-[48px] md:h-[66px] w-auto md:w-[260px] px-6 md:px-0 font-bold md:font-semibold text-xs md:text-base'
 }
 
 const currentIcon = computed(() => {
@@ -35,15 +37,15 @@ const currentIcon = computed(() => {
 
 const iconClasses = computed(() => {
   if (props.variant === 'export') {
-    return 'size-4 shrink-0 transition-transform duration-300 group-hover:-translate-y-0.5'
+    return 'size-3 md:size-4 shrink-0 transition-transform duration-300 group-hover:-translate-y-0.5'
   }
-  return 'size-6 shrink-0 transition-transform duration-300 group-hover:translate-x-1'
+  return 'size-4 md:size-6 shrink-0 transition-transform duration-300 group-hover:translate-x-1'
 })
 
 const classes = computed(() => [
-  'rounded-full flex items-center justify-center gap-3',
+  'rounded-full flex items-center justify-center gap-2 md:gap-3',
   'Montserrat text-white text-center border-none select-none cursor-pointer',
-  'transition-all duration-400',
+  'transition-all duration-400 shadow-sm md:shadow-none',
   
   sizeVariants[props.variant],
   colorVariants[props.color]
@@ -52,7 +54,7 @@ const classes = computed(() => [
 
 <template>
   <UButton :class="classes">
-    <span class="leading-none pt-0.5">{{ label }}</span>
+    <span class="leading-none pt-0.5 whitespace-nowrap">{{ label }}</span>
 
     <UIcon 
       v-if="showIcon" 

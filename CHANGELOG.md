@@ -84,3 +84,6 @@
 
 ### V1.1.1
 - added new locations data 
+
+### V1.1.2
+- added responsiveness to all user pages 

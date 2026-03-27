@@ -26,7 +26,7 @@ const statusStyles: Record<string, { bg: string, textBorder: string }> = {
 }
 
 const classes = computed(() => {
-  const base = 'px-4 py-1.5 font-bold text-sm inline-flex items-center justify-center whitespace-nowrap rounded-full'
+  const base = 'px-4 py-1.5 font-bold text-xs md:text-sm inline-flex items-center justify-center whitespace-nowrap rounded-full'
   
   const key = props.text 
 

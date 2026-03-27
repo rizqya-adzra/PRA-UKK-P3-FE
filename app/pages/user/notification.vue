@@ -38,26 +38,26 @@ const handleMarkAll = async () => {
 </script>
 
 <template>
-  <div class="w-4xl mx-auto mb-16">
-    <div class="flex items-end justify-between mb-7 px-10">
-      <p class="text-3xl font-bold">Notifikasi</p>
+  <div class="max-w-4xl w-full mx-auto mb-10 md:mb-16">
+    <div class="flex items-end justify-between mb-5 md:mb-7 px-2 md:px-10 mt-4 md:mt-0">
+      <p class="text-2xl md:text-3xl font-bold">Notifikasi</p>
       <p 
-        class="text-sm text-electric-blue cursor-pointer hover:underline font-medium" 
+        class="text-xs md:text-sm text-electric-blue cursor-pointer hover:underline font-medium" 
         @click="handleMarkAll"
       >
         mark all as read
       </p>
     </div>
 
-    <div v-if="pending" class="flex justify-center items-center py-20">
-      <div class="w-10 h-10 border-4 border-tertiary border-t-transparent rounded-full animate-spin"></div>
+    <div v-if="pending" class="flex justify-center items-center py-16 md:py-20">
+      <div class="w-8 h-8 md:w-10 md:h-10 border-4 border-tertiary border-t-transparent rounded-full animate-spin"></div>
     </div>
 
-    <div v-else-if="notifications.length === 0" class="text-center py-20 text-gray-500">
+    <div v-else-if="notifications.length === 0" class="text-center py-16 md:py-20 text-gray-500 text-sm md:text-base">
       <p>Belum ada notifikasi saat ini.</p>
     </div>
 
-    <div v-else class="flex flex-col gap-4">
+    <div v-else class="flex flex-col gap-3 md:gap-4">
       <UiNotificationCard 
         v-for="notif in notifications" 
         :key="notif.id"
