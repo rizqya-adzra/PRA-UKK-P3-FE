@@ -60,7 +60,7 @@ export interface Aspiration {
   category_detail: CategoryDetail
   attachments: Attachment[]
   status: string
-  status_display: string
+  status_display: string 
   status_color: string
   progress_updates: ProgressUpdate[]
   created_at: string

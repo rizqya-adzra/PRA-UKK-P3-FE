@@ -39,18 +39,18 @@ const handleMarkAll = async () => {
 
 <template>
   <div>
-    <div class="flex items-end justify-between mb-7">
-      <p class="text-3xl font-bold">Notifikasi</p>
+    <div class="flex items-end justify-between mb-5 md:mb-7 px-2 md:px-10 mt-4 md:mt-0">
+      <p class="text-2xl md:text-3xl font-bold">Notifikasi</p>
       <p 
-        class="text-sm text-electric-blue cursor-pointer hover:underline font-medium" 
+        class="text-xs md:text-sm text-electric-blue cursor-pointer hover:underline font-medium" 
         @click="handleMarkAll"
       >
         mark all as read
       </p>
     </div>
 
-    <div v-if="pending" class="flex justify-center items-center py-20">
-      <div class="w-10 h-10 border-4 border-tertiary border-t-transparent rounded-full animate-spin"></div>
+    <div v-if="pending" class="flex justify-center items-center py-16 md:py-20">
+      <div class="w-8 h-8 md:w-10 md:h-10 border-4 border-tertiary border-t-transparent rounded-full animate-spin"></div>
     </div>
 
     <div v-else-if="notifications.length === 0" class="text-center py-20 text-gray-500">

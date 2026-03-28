@@ -35,17 +35,17 @@ const getActiveColorClass = (label: string) => {
 </script>
 
 <template>
-  <div class="inline-flex items-center p-2 gap-1 bg-[#EFEFEF] rounded-full overflow-x-auto">
+  <div class="inline-flex items-center p-1.5 md:p-2 gap-1 bg-[#EFEFEF] rounded-full overflow-x-auto w-full md:w-auto [&::-webkit-scrollbar]:hidden">
     
     <button
       v-for="category in categories"
       :key="category.id"
       type="button"
       @click="selectCategory(category.id)"
-      class="px-6 py-2.5 rounded-full font-bold text-[15px] transition-all duration-300 cursor-pointer whitespace-nowrap"
+      class="px-4 md:px-6 py-1.5 md:py-2.5 rounded-full font-bold text-sm md:text-[15px] transition-all duration-300 cursor-pointer whitespace-nowrap shrink-0"
       :class="[
         modelValue === category.id 
-          ? `bg-white ${getActiveColorClass(category.label)}` 
+          ? `bg-white ${getActiveColorClass(category.label)} shadow-sm` 
           : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'
       ]"
     >

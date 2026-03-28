@@ -87,3 +87,6 @@
 
 ### V1.1.2
 - added responsiveness to all user pages 
+
+### V1.1.3
+- added responsiveness to all admin pages 

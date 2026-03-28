@@ -1,12 +1,12 @@
 <template>
-  <div class="max-w-480 mx-auto min-h-screen flex bg-[#F6F6F6]">
+  <div class="min-h-screen flex w-full bg-[#F6F6F6]">
     
-    <aside class="sticky top-0 h-screen shrink-0 overflow-y-auto">
-      <LayoutSidebarAdmin />
-    </aside>
+    <LayoutSidebarAdmin />
 
-    <main class="flex-1 py-14 px-8 min-w-0">
-      <slot />
+    <main class="flex-1 min-w-0 p-6 pt-20 lg:p-8 lg:pt-8">
+      <div class="max-w-7xl mx-auto w-full">
+        <slot />
+      </div>
     </main>
 
   </div>

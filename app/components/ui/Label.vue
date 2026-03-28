@@ -4,7 +4,7 @@ import { computed } from 'vue'
 type LabelVariant = 'solid' | 'outline'
 
 const props = withDefaults(defineProps<{
-  text: string
+  text: string 
   variant?: LabelVariant
 }>(), {
   variant: 'solid'
@@ -16,6 +16,7 @@ const categoryColors: Record<string, string> = {
   'Pendidikan': 'bg-red text-white',
   'Karakter': 'bg-yellow text-white',
   'Ibadah': 'bg-[#BA36C0] text-white',
+  'Kesehatan': 'bg-[#36BCC0] text-white',
 }
 
 const statusStyles: Record<string, { bg: string, textBorder: string }> = {

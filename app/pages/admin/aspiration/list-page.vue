@@ -76,8 +76,9 @@ const executeExport = async () => {
 </script>
 
 <template>
-  <div>  
-    <div class="w-1/2">
+  <div class="py-3 md:py-0 min-h-screen">  
+    
+    <div class="w-full md:w-1/2 mb-4 md:mb-0">
       <UiInput 
         v-model="searchParams" 
         placeholder="Cari laporan aspirasi..." 
@@ -85,16 +86,31 @@ const executeExport = async () => {
         icon="i-lucide-search-check"
       />
     </div>
-    <div class="flex items-center justify-between mt-8">
-      <p class="text-4xl font-bold text-center ml-2">Semua Daftar Aspirasi</p>
-      <div class="flex items-center justify-center gap-2">
+
+    <div class="flex flex-col md:flex-row md:items-center justify-between mt-4 md:mt-8 gap-4 md:gap-0">
+      <p class="hidden md:block text-4xl font-bold ml-2">Semua Daftar Aspirasi</p>
+      
+      <div class="flex overflow-x-auto md:overflow-visible items-center gap-2 pb-1 md:pb-0 [&::-webkit-scrollbar]:hidden w-full md:w-auto">
         <UiDropdownDate 
           v-model:startDate="startDateParams" 
           v-model:endDate="endDateParams" 
+          class="shrink-0"
         />    
-        <UiDropdownLocation v-model="locationParams" />
-        <UiDropdownStatus v-model="statusParams" />    
-        <UiDropdownSelect v-model="selectParams" />    
+        <UiDropdownLocation v-model="locationParams" class="shrink-0" />
+        <UiDropdownStatus v-model="statusParams" class="shrink-0" />    
+        <UiDropdownSelect v-model="selectParams" class="shrink-0" />    
+      </div>
+    </div>
+
+    <div class="flex md:hidden flex-col gap-4 mt-6 mb-2">
+      <div class="flex items-end justify-between w-full">
+        <h2 class="font-bold text-lg text-black">Semua Daftar Aspirasi</h2>
+        <span class="text-xs text-gray-500 font-medium">{{ listAspirasi.length }} laporan</span>
+      </div>
+      
+      <div class="flex items-center justify-between w-full">
+        <UiButton label="Export to Excel" variant="export" color="green" @click="isExportModalOpen = true" />
+        <UiDropdownPagination v-model="limitParams" />
       </div>
     </div>
   
@@ -119,30 +135,32 @@ const executeExport = async () => {
         />
       </div>
     </div>
-    <div class="flex items-center justify-between">
-      <div class="flex items-center gap-4 mb-4">
+
+    <div class="flex flex-col md:flex-row items-end md:items-center justify-end md:justify-between w-full mt-4 md:mt-0">
+      
+      <div class="flex items-center gap-3 md:gap-4 mb-4 order-1">
         <button 
           @click="prevPage" 
           :disabled="pageParams === 1"
-          class="w-6 h-6 flex items-center justify-center rounded-full disabled:opacity-20 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors cursor-pointer"
+          class="w-5 h-5 md:w-6 md:h-6 flex items-center justify-center rounded-full disabled:opacity-20 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors cursor-pointer"
         >
-          <UIcon name="i-lucide-chevron-left" class="size-6 text-tertiary" />
+          <UIcon name="i-lucide-chevron-left" class="size-4 md:size-6 text-tertiary" />
         </button>
 
-        <span class="select-none text-tertiary font-semibold">
+        <span class="select-none text-tertiary font-semibold text-xs md:text-base">
           {{ pageParams }} / {{ totalPages }}
         </span>
 
         <button 
           @click="nextPage" 
           :disabled="pageParams >= totalPages"
-          class="w-6 h-6 flex items-center justify-center rounded-full disabled:opacity-20 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors cursor-pointer"
+          class="w-5 h-5 md:w-6 md:h-6 flex items-center justify-center rounded-full disabled:opacity-20 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors cursor-pointer"
         >
-          <UIcon name="i-lucide-chevron-right" class="size-6 text-tertiary" />
+          <UIcon name="i-lucide-chevron-right" class="size-4 md:size-6 text-tertiary" />
         </button>
       </div>
       
-      <div class="flex items-center justify-end gap-2 mb-4">
+      <div class="hidden md:flex items-center justify-end gap-2 mb-4 order-2">
         <UiDropdownPagination v-model="limitParams" />
         <UiButton label="Export to Excel" variant="export" color="green" @click="isExportModalOpen = true" />
       </div>
