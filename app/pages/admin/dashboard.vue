@@ -26,6 +26,13 @@ const todayDate = computed(() => {
   const options: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }
   return new Date().toLocaleDateString('en-US', options)
 })
+
+useHead({
+  title: 'Dashboard Admin | Aspiration',
+  meta: [
+    { name: 'description', content: 'Kirim aspirasi kamu di sini.' }
+  ]
+})
 </script>
 
 <template>
@@ -124,7 +131,7 @@ const todayDate = computed(() => {
       </div>
         
       <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-        <UiCard 
+        <UiCardDefault 
           v-for="item in listAspirasi" 
           :key="item.id" 
           :report="item" 

@@ -62,6 +62,10 @@ const executeExportPDF = async () => {
     isExporting.value = false
   }
 }
+
+useHead({
+  title: computed(() => aspiration.value ? `Detail: ${aspiration.value.title}` : 'Loading...')
+})
 </script>
 
 <template>

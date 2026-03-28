@@ -101,7 +101,7 @@ onMounted(async () => {
           'bg-white backdrop-blur-md',
           'transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1)', 
           isOpen
-            ? 'rounded-3xl h-105 w-[85vw] bg-opacity-95'
+            ? 'rounded-3xl h-112 w-[85vw] bg-opacity-95'
             : 'rounded-xl h-12 w-12 bg-opacity-100'
         ]"
         class="origin-top-right overflow-hidden relative">

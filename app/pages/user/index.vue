@@ -71,13 +71,10 @@ const goToDetail = (id: string) => {
     </div>
 
     <div class="w-full space-y-4 md:space-y-5 mt-2 md:mt-0">
-      <div>
-        <NuxtLink to="/user/aspiration/list-page" class="flex items-center justify-between md:justify-start md:gap-3 w-full">
-          <p class="hidden md:block text-3xl font-bold">Histori Aspirasi Kamu</p>
-          <UIcon name="i-lucide-arrow-right" class="hidden md:block size-5" />
-          
-          <p class="md:hidden text-md font-bold text-black">Histori Aspirasi</p>
-          <span class="md:hidden text-xs font-bold text-blue-600">Lihat Semua</span>
+      <div class="flex items-center justify-between font-bold mb-3 md:mb-4 px-1 md:px-2">
+        <p class="text-base md:text-3xl">Histori Aspirasi mu</p>
+        <NuxtLink to="/user/aspiration/list-page">
+          <p class="text-blue-500 text-xs md:text-sm cursor-pointer hover:underline">Lihat Semua</p>
         </NuxtLink>
       </div>
       <div v-if="listAspirasi.length === 0" class="bg-white rounded-4xl w-full px-12 py-24 space-y-9 md:shadow-none">
@@ -85,7 +82,7 @@ const goToDetail = (id: string) => {
       </div>
 
       <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 w-full">
-        <UiCard 
+        <UiCardDefault
           v-for="item in listAspirasi.slice(0, 2)" 
           :key="item.id" 
           :report="item" 

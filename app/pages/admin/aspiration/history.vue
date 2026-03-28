@@ -72,6 +72,13 @@ const executeExport = async () => {
     isExporting.value = false
   }
 }
+
+useHead({
+  title: 'History Aspirasi | Aspiration',
+  meta: [
+    { name: 'description', content: 'Kirim aspirasi kamu di sini.' }
+  ]
+})
 </script>
 
 <template>
@@ -115,7 +122,7 @@ const executeExport = async () => {
         <span class="text-xs text-gray-500 font-medium">{{ listAspirasi.length }} laporan</span>
       </div>
       
-      <div class="flex items-center justify-between w-full">
+      <div v-if="listAspirasi.length > 0" class="flex items-center justify-between w-full">
         <UiButton label="Export to Excel" variant="export" color="green" @click="isExportModalOpen = true" />
         <UiDropdownPagination v-model="limitParams" />
       </div>
@@ -133,7 +140,7 @@ const executeExport = async () => {
       </div>
   
       <div v-else class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
-        <UiCard 
+        <UiCardDefault 
           v-for="item in listAspirasi" 
           :key="item.id" 
           :report="item" 
@@ -143,7 +150,7 @@ const executeExport = async () => {
       </div>
     </div>
 
-    <div class="flex flex-col md:flex-row items-end md:items-center justify-end md:justify-between w-full mt-4 md:mt-0">
+    <div v-if="listAspirasi.length > 0" class="flex flex-col md:flex-row items-end md:items-center justify-end md:justify-between w-full mt-4 md:mt-0">
       
       <div class="flex items-center gap-3 md:gap-4 mb-4 order-1">
         <button 

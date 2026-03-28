@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useAuthStore } from '~/stores/useAuthStore'
 import { useAspiration } from '~/composables/api/useAspiration' 
 import defaultProfileImage from '~/assets/images/core_profile.jpg'

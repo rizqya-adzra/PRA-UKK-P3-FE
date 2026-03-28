@@ -105,7 +105,7 @@ const userAttachments = computed(() => {
         <div class="flex flex-wrap gap-3 md:gap-4">
           <template v-for="(file, index) in (expandedAttachmentGroups.has('user') ? userAttachments : userAttachments.slice(0, MAX_VISIBLE_ATTACHMENTS))" :key="file.id">
             
-            <div class="relative w-27 sm:w-35 md:w-45 h-27 sm:h-35 md:h-45 rounded-2xl md:rounded-3xl overflow-hidden border border-gray-100 cursor-pointer transition-transform duration-300 hover:scale-105 group shrink-0">
+            <div class="relative w-27 sm:w-35 md:w-45 h-27 sm:h-35 md:h-45 rounded-2xl md:rounded-3xl overflow-hidden border border-gray-100 cursor-pointer transition-transform duration-300">
               
               <img 
                 v-if="file.file_type === 'image'" 
@@ -182,7 +182,7 @@ const userAttachments = computed(() => {
             <div class="flex flex-wrap gap-3 md:gap-4">
               <template v-for="(file, index) in (expandedAttachmentGroups.has(`admin-${update.id}`) ? update.attachments : update.attachments.slice(0, MAX_VISIBLE_ATTACHMENTS))" :key="file.id">
                 
-                <div class="relative w-25 sm:w-32 md:w-40 h-25 sm:h-32 md:h-40 rounded-2xl md:rounded-3xl overflow-hidden border border-blue-100 cursor-pointer transition-transform duration-300 hover:scale-105 group shrink-0">
+                <div class="relative w-25 sm:w-32 md:w-40 h-25 sm:h-32 md:h-40 rounded-2xl md:rounded-3xl overflow-hidden border border-blue-100 cursor-pointer transition-transform duration-300">
                   <img 
                     v-if="file.file_type === 'image'"
                     :src="file.file" 

@@ -19,6 +19,9 @@ const goToAspirationDetail = async (notif: any) => {
     } catch (error) {
       console.error('Gagal menandai notifikasi sebagai sudah dibaca:', error)
     }
+    await Promise.all([
+      refreshNuxtData('notifications-list')
+    ])
     navigateTo(`/admin/aspiration/detail/${notif.aspiration_id}`)
   }
 }
@@ -34,7 +37,26 @@ const handleMarkAll = async () => {
   } catch (error) {
     console.error("Gagal menandai semua notifikasi:", error)
   }
+  await Promise.all([
+    refreshNuxtData('notifications-list')
+  ])
 }
+
+const unreadCount = computed(() => 
+  notifications.value?.filter((notif: any) => !notif.is_read).length || 0
+)
+
+useHead({
+  title: computed(() => {
+    if (!notifications.value) return 'Loading...'
+    
+    const count = unreadCount.value
+    
+    return count > 0 
+      ? `(${count}) Notifikasi | Aspiration` 
+      : 'Notifikasi | Aspiration'
+  })
+})
 </script>
 
 <template>

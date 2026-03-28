@@ -108,13 +108,13 @@ const executeExport = async () => {
       </div>
     </div>
 
-    <div class="flex md:hidden flex-col gap-4 mt-8 mb-4">
+    <div class="flex md:hidden flex-col gap-4 mb-4">
       <div class="flex items-end justify-between w-full">
         <h2 class="font-bold text-[15px] text-black">Arsip History</h2>
         <span class="text-[10px] text-gray-500 font-medium">{{ listAspirasi.length }} laporan</span>
       </div>
       
-      <div class="flex items-center justify-between w-full">
+      <div v-if="listAspirasi.length > 0" class="flex items-center justify-between w-full">
         <UiButton label="Export to Excel" variant="export" color="green" @click="isExportModalOpen = true" />
         <UiDropdownPagination v-model="limitParams" />
       </div>
@@ -132,7 +132,7 @@ const executeExport = async () => {
       </div>
 
       <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-        <UiCard 
+        <UiCardDefault
           v-for="item in listAspirasi" 
           :key="item.id" 
           :report="item" 
@@ -142,7 +142,7 @@ const executeExport = async () => {
       </div>
     </div>
     
-    <div class="flex flex-col md:flex-row items-end md:items-center justify-end md:justify-between w-full mt-4 md:mt-0">
+    <div v-if="listAspirasi.length > 0" class="flex flex-col md:flex-row items-end md:items-center justify-end md:justify-between w-full mt-4 md:mt-0">
       
       <div class="flex items-center gap-3 md:gap-4 mb-4 order-1">
         <button 

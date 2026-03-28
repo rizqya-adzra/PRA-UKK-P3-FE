@@ -129,6 +129,10 @@ const handleSubmit = async () => {
     isSubmitting.value = false
   }
 }
+
+useHead({
+  title: computed(() => aspiration.value ? `${aspiration.value.title} | Aspiration` : 'Loading...')
+})
 </script>
 
 <template>
@@ -167,7 +171,7 @@ const handleSubmit = async () => {
       </div>
     </div>
 
-    <div class="w-full mb-16">
+    <div class="w-full mb-16 bg-white rounded-3xl md:rounded-4xl py-8 md:py-10 px-6 md:px-12 mt-0 md:mt-3 md:mb-16 md:space-y-6">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
         
         <div class="w-full flex items-center gap-3 text-left">
@@ -211,14 +215,14 @@ const handleSubmit = async () => {
 
           <button 
             @click="removeFile(index)"
-            class="absolute top-1 right-1 bg-black text-white rounded-full w-6 h-6 md:w-7 md:h-7 p-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer flex items-center justify-center"
+            class="absolute top-1 right-1 bg-black text-white rounded-full w-6 h-6 md:w-7 md:h-7 p-1 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 cursor-pointer flex items-center justify-center"
           >
             <UIcon name="i-lucide-x" class="size-3 md:size-4" />
           </button>
         </div>
       </div>
 
-      <UiInput v-model="form.description" label="Deskripsi" placeholder="Berikan Tanggapan" type="textarea" variant="white" />
+      <UiInput v-model="form.description" label="Deskripsi" placeholder="Berikan Tanggapan" type="textarea" variant="gray" />
       
       <div class="flex flex-col md:flex-row gap-4 md:gap-5 items-start md:items-center justify-between mt-2">
         <UiFileUpload 

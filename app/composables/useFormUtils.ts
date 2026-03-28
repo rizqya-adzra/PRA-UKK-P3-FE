@@ -1,4 +1,4 @@
-import { ref, watch, type Ref } from 'vue'
+import { ref, watch, onMounted, onUnmounted, type Ref } from 'vue'
 import { onBeforeRouteLeave } from 'vue-router'
 
 export function useFormUtils() {
@@ -61,6 +61,21 @@ export function useFormUtils() {
         leaveNext(false)
         leaveNext = null
       }
+    })
+
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (isFormDirty.value && !isSubmitting.value && !alertModal.value.isSuccess) {
+        event.preventDefault()
+        event.returnValue = ''
+      }
+    }
+
+    onMounted(() => {
+      window.addEventListener('beforeunload', handleBeforeUnload)
+    })
+
+    onUnmounted(() => {
+      window.removeEventListener('beforeunload', handleBeforeUnload)
     })
   }
 

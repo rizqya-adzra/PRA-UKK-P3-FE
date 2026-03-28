@@ -2,12 +2,14 @@
 import { useAuthStore } from '~/stores/useAuthStore'
 import { useAspiration } from '~/composables/api/useAspiration'
 import { ref, computed, onMounted, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
 definePageMeta({
   middleware: 'auth',
   layout: 'default'
 })
 
+const router = useRouter()
 const auth = useAuthStore()
 const showTosModal = ref(false)
 const showPrivacyPolicyModal = ref(false)
@@ -136,6 +138,10 @@ watch(isEditProfileModalOpen, (isOpen) => {
     profileForm.value.image = null
   }
 })
+
+const goToDetail = (id: string) => {
+  router.push(`/user/aspiration/detail/${id}`)
+}
 </script>
 
 <template>
@@ -201,10 +207,11 @@ watch(isEditProfileModalOpen, (isOpen) => {
         
         <div class="space-y-3">
           <template v-if="recentHistories.length > 0">
-            <UiCard 
+            <UiCardDefault 
               v-for="report in recentHistories" 
               :key="report.id" 
               :report="report" 
+              @click="goToDetail(report.id)" 
             />
           </template>
           
@@ -297,7 +304,6 @@ watch(isEditProfileModalOpen, (isOpen) => {
           color="black" 
           @click="handleSaveProfile"
           :loading="auth.loading"
-          class="w-full md:w-auto"
         />
       </div>
     </template>
@@ -328,7 +334,6 @@ watch(isEditProfileModalOpen, (isOpen) => {
           color="black" 
           @click="handleSavePassword"
           :loading="auth.loading"
-          class="w-full md:w-auto"
         />
       </div>
     </template>
@@ -360,7 +365,6 @@ watch(isEditProfileModalOpen, (isOpen) => {
           variant="imperative" 
           color="red" 
           @click="handleConfirmLogout" 
-          class="w-full md:w-auto"
         />
       </div>
     </template>

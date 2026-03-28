@@ -118,6 +118,10 @@ watch(isEditProfileModalOpen, (isOpen) => {
     profileForm.value.image = null
   }
 })
+
+useHead({
+  title: computed(() => auth?.user?.name ? `${auth?.user?.name} | Aspiration` : 'Loading...')
+})
 </script>
 
 <template>
@@ -230,7 +234,6 @@ watch(isEditProfileModalOpen, (isOpen) => {
           color="black" 
           @click="handleSaveProfile"
           :loading="auth.loading"
-          class="w-full md:w-auto"
         />
       </div>
     </template>
@@ -261,7 +264,6 @@ watch(isEditProfileModalOpen, (isOpen) => {
           color="black" 
           @click="handleSavePassword"
           :loading="auth.loading"
-          class="w-full md:w-auto"
         />
       </div>
     </template>
@@ -288,7 +290,6 @@ watch(isEditProfileModalOpen, (isOpen) => {
           variant="imperative" 
           color="red" 
           @click="handleConfirmLogout" 
-          class="w-full md:w-auto"
         />
       </div>
     </template>

@@ -45,7 +45,7 @@ const getActiveColorClass = (label: string) => {
       class="px-4 md:px-6 py-1.5 md:py-2.5 rounded-full font-bold text-sm md:text-[15px] transition-all duration-300 cursor-pointer whitespace-nowrap shrink-0"
       :class="[
         modelValue === category.id 
-          ? `bg-white ${getActiveColorClass(category.label)} shadow-sm` 
+          ? `bg-white ${getActiveColorClass(category.label)}` 
           : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'
       ]"
     >

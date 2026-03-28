@@ -90,3 +90,7 @@
 
 ### V1.1.3
 - added responsiveness to all admin pages 
+
+### V1.1.3
+- fixed bug and others
+- added useHead to all pages

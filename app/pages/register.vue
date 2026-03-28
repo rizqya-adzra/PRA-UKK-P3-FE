@@ -1,16 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useAuthStore } from '~/stores/useAuthStore'
+import { useAuth } from '~/composables/api/useAuth'
 
 definePageMeta({
   middleware: 'auth',
   layout: 'guest'
 })
 
-const authStore = useAuthStore()
-const router = useRouter()
-const showTosModal = ref(false)
-const showPrivacyPolicyModal = ref(false)
+const { authStore, router, showTosModal, showPrivacyPolicyModal } = useAuth()
 
 const form = ref({
   email: '',
@@ -29,7 +26,6 @@ const handleRegister = async () => {
     })
 
     router.push('/login') 
-
     console.log('Register sukses!')
     
   } catch (error) {
@@ -41,12 +37,12 @@ const handleRegister = async () => {
 <template>
   <img src="~/assets/images/auth_bg.jpg" alt="background" class="fixed inset-0 w-full h-full object-cover -z-10" />
   
-  <div class="min-h-screen flex items-center justify-center text-sm m-5">
-    <div class="bg-white/80 backdrop-blur-md rounded-3xl px-12 py-20 w-full max-w-md shadow-2xl shadow-white/50 relative">
+  <div class="min-h-screen flex items-center justify-center text-sm m-4 md:m-5 py-8">
+    <div class="bg-white rounded-2xl md:rounded-3xl px-8 md:px-12 py-10 md:py-16 w-full max-w-md shadow-2xl shadow-white/50 relative">
 
-      <div class="flex flex-col gap-4 justify-center items-center">
-        <img src="~/assets/images/logo.png" alt="Logo" class="w-20 h-20 shrink-0" />
-        <h2 class="text-3xl font-bold mb-14 text-center">Sign up for <span class="text-electric-blue">Aspiration</span></h2>
+      <div class="flex flex-col gap-3 md:gap-4 justify-center items-center">
+        <img src="~/assets/images/logo.png" alt="Logo" class="w-16 h-16 md:w-20 md:h-20 shrink-0" />
+        <h2 class="text-2xl md:text-3xl font-bold mb-8 md:mb-12 text-center">Sign up to Aspiration</h2>
       </div>
 
       <form @submit.prevent="handleRegister" class="flex flex-col gap-4">
@@ -95,16 +91,16 @@ const handleRegister = async () => {
           <span v-else>Sign Up</span>
         </UiButton>
 
-        <p class="text-center mt-2">
+        <p class="text-center mt-2 text-xs md:text-sm">
           Udah punya akun? 
           <NuxtLink to="/login" class="text-blue-500 hover:text-blue-600 font-medium hover:underline transition-all">
             Sign in
           </NuxtLink>
         </p>
 
-        <div class="border border-black/10 mt-6"></div>
+        <div class="border border-black/10 mt-4 md:mt-6"></div>
         
-        <div class="flex gap-3 justify-center items-center text-black/40 text-xs mt-4">
+        <div class="flex gap-3 justify-center items-center text-black/40 text-[10px] md:text-xs mt-4">
           <p class="cursor-pointer hover:text-black transition-colors" @click="showTosModal = true">Terms of Service</p>
           <p>|</p>
           <p class="cursor-pointer hover:text-black transition-colors" @click="showPrivacyPolicyModal = true">Privacy Policy</p>
@@ -113,11 +109,11 @@ const handleRegister = async () => {
     </div>
   </div>
 
-  <UiModalDefault v-model="showTosModal" :title="TOS_DATA.title" maxWidth="max-w-3xl">
+  <UiModalDefault v-model="showTosModal" :title="TOS_DATA?.title || 'Terms of Service'" maxWidth="max-w-3xl">
     <UiModalDataToS />
   </UiModalDefault>
 
-  <UiModalDefault v-model="showPrivacyPolicyModal" :title="PRIVACY_POLICY.title" maxWidth="max-w-3xl">
+  <UiModalDefault v-model="showPrivacyPolicyModal" :title="PRIVACY_POLICY?.title || 'Privacy Policy'" maxWidth="max-w-3xl">
     <UiModalDataPrivacyPolicy />
   </UiModalDefault>
 </template>
