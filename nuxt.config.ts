@@ -18,7 +18,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBase: 'http://192.168.143.60:8000/api/'
+      apiBase: 'https://pra-ukk-p3-be-production.up.railway.app/api/'
     }
   }
 })
