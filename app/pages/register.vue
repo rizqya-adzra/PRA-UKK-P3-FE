@@ -32,6 +32,10 @@ const handleRegister = async () => {
     console.error('Register gagal', error)
   }
 }
+
+useHead({
+  title: 'Register | Aspiration',
+})
 </script>
 
 <template>

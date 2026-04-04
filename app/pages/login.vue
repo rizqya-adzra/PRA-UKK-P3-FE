@@ -28,6 +28,10 @@ const handleLogin = async () => {
     console.error('Login gagal', error)
   }
 }
+
+useHead({
+  title: 'Login | Aspiration',
+})
 </script>
 
 <template>

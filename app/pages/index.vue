@@ -3,6 +3,10 @@ definePageMeta({
   middleware: 'auth',
   layout: 'guest'
 })
+
+useHead({
+  title: 'Welcome! | Aspiration',
+})
 </script>
 
 <template>
