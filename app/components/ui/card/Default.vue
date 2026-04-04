@@ -82,7 +82,7 @@ const formattedDate = computed(() => {
     <div class="flex items-center">
       <img :src="report?.student_image || defaultImage" alt="" class="w-9 h-9 md:w-12 md:h-12 rounded-full bg-[#A3A3A3] shrink-0 mr-3 md:mr-4">
       
-      <div class="flex flex-col">
+      <div class="flex flex-col truncate">
         <span class="font-bold text-black text-xs md:text-sm truncate">{{ report?.student_info?.name || 'No Name' }}</span>
         <span class="text-gray-500 md:text-black text-xs md:text-sm truncate">{{ report?.student || '-' }}</span> 
       </div>

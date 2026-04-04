@@ -94,3 +94,6 @@
 ### V1.1.3
 - fixed bug and others
 - added useHead to all pages
+
+### V1.1.4
+- fixed bug and others

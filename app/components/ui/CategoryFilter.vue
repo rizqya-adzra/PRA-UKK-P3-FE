@@ -1,17 +1,25 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useCategory } from '~/composables/api/useCategory'
+
 const props = defineProps<{
   modelValue?: string | number | null
 }>()
 
 const emit = defineEmits(['update:modelValue'])
 
-const categories = [
-  { id: '9c419047-3b39-4b2b-a42b-34101fd166c9', label: 'Fasilitas' },
-  { id: 'b87f6a78-10a0-422a-a22e-ecdec921f702', label: 'Lingkungan' },
-  { id: 'c2dc2a64-c057-4845-bedc-2364dea0ad45', label: 'Pendidikan' },
-  { id: '62c1cee5-b99f-456c-b24a-f2b49fad3017', label: 'Karakter' },
-  { id: '96d3c761-94fe-4ae8-a68e-89502144498e', label: 'Ibadah' }
-]
+const { fetchCategories } = useCategory()
+const { data: response, pending } = await fetchCategories()
+
+const categories = computed(() => {
+  if (response.value?.data) {
+    return response.value.data.map((cat: any) => ({
+      id: cat.id,
+      label: cat.name
+    }))
+  }
+  return []
+})
 
 const selectCategory = (id: string) => {
   if (props.modelValue === id) {
@@ -29,6 +37,7 @@ const getActiveColorClass = (label: string) => {
   if (text.includes('pendidikan')) return 'text-red' 
   if (text.includes('karakter')) return 'text-yellow'
   if (text.includes('ibadah')) return 'text-[#BA36C0]'
+  if (text.includes('kesehatan')) return 'text-[#36BCC0]'
   
   return 'text-[#6D5DFF]' 
 }
@@ -37,7 +46,12 @@ const getActiveColorClass = (label: string) => {
 <template>
   <div class="inline-flex items-center p-1.5 md:p-2 gap-1 bg-[#EFEFEF] rounded-full overflow-x-auto w-full md:w-auto [&::-webkit-scrollbar]:hidden">
     
+    <div v-if="pending" class="px-4 md:px-6 py-1.5 md:py-2.5 text-sm md:text-[15px] font-bold text-gray-500 whitespace-nowrap">
+      Memuat kategori...
+    </div>
+
     <button
+      v-else
       v-for="category in categories"
       :key="category.id"
       type="button"

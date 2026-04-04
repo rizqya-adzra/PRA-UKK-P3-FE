@@ -45,7 +45,7 @@ watch(selected, (newValue) => {
       variant="none"
       :disabled="pending"
       :ui="{
-        content: 'bg-white/80 backdrop-blur-md ring-0 border-none rounded-[16px] md:rounded-2xl p-2 md:p-3 min-w-[100px] md:min-w-[120px]',
+        content: 'bg-white/80 backdrop-blur-md ring-0 border-none rounded-[16px] md:rounded-2xl p-2 md:p-3 min-w-[100px] md:min-w-[120px] shadow',
         input: 'hidden h-0 w-0 p-0 m-0 border-none', 
         item: 'p-0 cursor-pointer transition-transform duration-200 data-[highlighted]:bg-tertiary/5 px-4 rounded-xl'
       }"

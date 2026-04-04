@@ -31,7 +31,7 @@ const inputVariants: Record<InputVariant, string> = {
   search: [
     'h-[48px] md:h-[64px] w-full rounded-full pl-12 md:pl-16 pr-4 md:pr-6', 
     'bg-white text-sm md:text-base text-black font-medium border border-gray-100 md:border-2 md:border-transparent',
-    'hover:border-blue-500 focus:border-blue-500', 
+    'hover:border-electric-blue focus:border-electric-blue', 
     'placeholder:text-gray-400 md:placeholder:text-tertiary outline-none transition-all duration-300'
   ].join(' '),
 

@@ -11,25 +11,62 @@ const emit = defineEmits(['update:modelValue'])
 const { fetchLocations } = useLocation()
 const { data: response, pending } = await fetchLocations()
 
+// 1. Tambahkan state untuk input pencarian
+const searchQuery = ref('')
+
 const locations = computed(() => {
   if (response.value?.data) {
-    return response.value.data.map(loc => ({
+    let allLocations = response.value.data
+    
+    // 2. Filter data berdasarkan searchQuery jika ada
+    if (searchQuery.value) {
+      const searchLower = searchQuery.value.toLowerCase()
+      allLocations = allLocations.filter((loc: any) => 
+        loc.name.toLowerCase().includes(searchLower)
+      )
+    }
+    
+    // 3. Simpan total data yang sudah difilter
+    const totalFiltered = allLocations.length
+
+    // 4. Potong maksimal 5 item
+    const sliced = allLocations.map((loc: any) => ({
       id: loc.id,
-      label: loc.name
-    }))
-    .slice(0, 10)
+      label: loc.name,
+      disabled: false
+    })).slice(0, 5)
+
+    // 5. Tambahkan footer info dinamis jika hasil filter > 5
+    if (totalFiltered > 5) {
+      sliced.push({
+        id: 'info-footer', 
+        label: `Menampilkan 5 dari total ${totalFiltered} lokasi`,
+        disabled: true
+      })
+    }
+    
+    // (Opsional) Tampilkan pesan jika tidak ada lokasi yang ditemukan
+    if (totalFiltered === 0 && searchQuery.value) {
+       sliced.push({
+        id: 'info-footer', 
+        label: `Lokasi tidak ditemukan`,
+        disabled: true
+      })
+    }
+
+    return sliced
   }
   return []
 })
 
-const selected = ref(locations.value.find(c => c.id === props.modelValue) || undefined)
+const selected = ref(locations.value.find(c => c.id === props.modelValue && c.id !== 'info-footer') || undefined)
 
 watch(() => props.modelValue, (newVal) => {
-  selected.value = locations.value.find(c => c.id === newVal) || undefined
+  selected.value = locations.value.find(c => c.id === newVal && c.id !== 'info-footer') || undefined
 })
 
 watch(selected, (newValue) => {
-  if (newValue) {
+  if (newValue && newValue.id !== 'info-footer') {
     emit('update:modelValue', newValue.id)
   } else {
     emit('update:modelValue', '')
@@ -46,8 +83,9 @@ watch(selected, (newValue) => {
       variant="none"
       :disabled="pending"
       :ui="{
-        content: 'bg-white/80 backdrop-blur-md ring-0 border-none rounded-[16px] md:rounded-2xl p-2 md:p-3 min-w-[100px] md:min-w-[120px]',
-        item: 'p-0 cursor-pointer transition-transform duration-200 data-[highlighted]:bg-tertiary/5 px-4 rounded-xl'
+        content: 'bg-white/80 backdrop-blur-md ring-0 border-none rounded-[16px] md:rounded-2xl p-2 md:p-3 min-w-[100px] md:min-w-[120px] shadow',
+        input: 'hidden h-0 w-0 p-0 m-0 border-none', 
+        item: 'p-0 cursor-pointer transition-transform duration-200 data-[highlighted]:bg-tertiary/5 px-4 rounded-xl data-[disabled]:cursor-default data-[disabled]:opacity-100'
       }"
     >
       <template #default="{ open }">
@@ -68,7 +106,7 @@ watch(selected, (newValue) => {
           <UIcon 
             v-if="selected && !pending"
             name="i-lucide-x" 
-            class="size-5 text-gray-400 hover:text-red-500 transition-colors cursor-pointer" 
+            class="size-5 text-gray-400 hover:text-red-500 transition-colors cursor-pointer z-10" 
             @click.prevent.stop="selected = undefined"
           />
           <UIcon 
@@ -79,8 +117,25 @@ watch(selected, (newValue) => {
         </button>
       </template>
 
+      <template #content-top>
+        <div class="mb-3">
+          <UiInput 
+            v-model="searchQuery"
+            placeholder="Cari Lokasi..." 
+            variant="search" 
+            icon="i-lucide-search" 
+            class="w-full bg-white rounded-full"
+            @click.stop
+          />
+        </div>
+      </template>
+
       <template #item="{ item }">
-        <p class="font-semibold text-tertiary hover:text-black duration-300 my-2">{{ item.label }}</p>
+        <div v-if="item.id === 'info-footer'" class="w-full text-center border-t border-gray-200 mt-1 pt-2 pb-1">
+          <span class="text-[11px] md:text-xs text-gray-400 italic font-medium w-full">{{ item.label }}</span>
+        </div>
+        
+        <p v-else class="font-semibold text-tertiary hover:text-black duration-300 my-2">{{ item.label }}</p>
       </template>
     </USelectMenu>
   </div>

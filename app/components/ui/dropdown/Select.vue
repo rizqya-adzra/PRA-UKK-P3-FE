@@ -41,7 +41,8 @@ const students = computed(() => {
       email: user.email,
       name: user.profile?.name || 'User Tanpa Nama',
       nis: user.profile?.nis || '-',
-      rombel: user.profile?.rombel || '-'
+      rombel: user.profile?.rombel || '-',
+      disabled: false
     }
   })
 })
@@ -58,16 +59,31 @@ const filteredStudents = computed(() => {
     })
   }
 
-  return result.slice(0, 5)
+  const totalFiltered = result.length
+
+  const sliced = result.slice(0, 3).map(s => ({ ...s, disabled: false }))
+
+  if (totalFiltered > 3) {
+    sliced.push({
+      id: 'info-footer',
+      email: '',
+      name: `Menampilkan 3 dari total ${totalFiltered} siswa`,
+      nis: '',
+      rombel: '',
+      disabled: true 
+    })
+  }
+
+  return sliced
 })
 
 const selectedStudent = computed({
   get() {
     if (!props.modelValue) return undefined
-    return students.value.find(s => s.id?.toString() === props.modelValue?.toString())
+    return students.value.find(s => s.id?.toString() === props.modelValue?.toString() && s.id !== 'info-footer')
   },
   set(newStudent) {
-    if (newStudent) {
+    if (newStudent && newStudent.id !== 'info-footer') {
       emit('update:modelValue', newStudent.id.toString())
     } else {
       emit('update:modelValue', '')
@@ -84,9 +100,8 @@ const selectedStudent = computed({
       trailing-icon=""
       variant="none"
       :ui="{
-        content: 'bg-white/80 backdrop-blur-md ring-0 border-none rounded-[16px] md:rounded-2xl p-2 md:p-3 min-w-[100px] md:min-w-[120px]',
+        content: 'bg-white/80 backdrop-blur-md ring-0 border-none rounded-[16px] md:rounded-2xl p-2 md:p-3 min-w-[100px] md:min-w-[120px] shadow',
         input: 'hidden h-0 w-0 p-0 m-0 border-none', 
-        item: 'p-0 cursor-pointer transition-transform duration-200 data-[highlighted]:bg-tertiary/5'
       }"
     >
       <template #default="{ open }">
@@ -122,14 +137,18 @@ const selectedStudent = computed({
             placeholder="Cari Siswa..." 
             variant="search" 
             icon="i-lucide-search" 
-            class="w-full bg-white rounded-full shadow-sm"
+            class="w-full bg-white rounded-full"
             @click.stop
           />
         </div>
       </template>
 
       <template #item="{ item }">
-        <div class="w-full my-1 bg-white rounded-2xl p-4 flex items-center gap-4 shadow-sm text-left transition-all duration-300 hover:bg-[#E9ECF6] cursor-pointer">
+        <div v-if="item.id === 'info-footer'" class="w-full text-center border-t border-gray-200 mt-2 pt-3 pb-1">
+          <span class="text-[11px] md:text-xs text-gray-400 italic font-medium w-full">{{ item.name }}</span>
+        </div>
+
+        <div v-else class="w-full bg-white rounded-2xl p-4 flex items-center gap-4 text-left transition-all duration-400 hover:ring hover:ring-electric-blue cursor-pointer">
           <div class="size-12 rounded-full bg-gray-200 shrink-0 border border-gray-100"></div>
           <div class="flex flex-col items-start min-w-0">
             <span class="font-bold text-black text-[15px] leading-tight truncate w-full">
@@ -140,7 +159,7 @@ const selectedStudent = computed({
             </span>
           </div>
         </div>
-  </template>
+      </template>
     </USelectMenu>
   </div>
 </template>
